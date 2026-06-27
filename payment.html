@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>إتمام الاشتراك - CoinAlert Pro</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #0a0e1a; color: #fff; padding: 20px; }
+    .container { max-width: 600px; margin: 0 auto; }
+    h2 { text-align: center; margin-bottom: 30px; color: #00d4ff; }
+    
+    .plan-selector, .network-selector { display: flex; gap: 15px; margin-bottom: 25px; }
+    .plan-selector button, .network-selector button {
+      flex: 1; padding: 20px; border: 2px solid #1a2332; border-radius: 12px;
+      background: #0f1623; color: #fff; cursor: pointer; transition: all 0.3s;
+    }
+    .plan-selector button.active, .network-selector button.active {
+      border-color: #00d4ff; background: #1a2332;
+    }
+    .save { color: #00ff88; font-size: 12px; }
+    
+    .amount-box {
+      text-align: center; padding: 20px; background: #1a2332;
+      border-radius: 12px; margin-bottom: 25px;
+    }
+    .amount-box strong { color: #00d4ff; font-size: 28px; display: block; margin-top: 10px; }
+    
+    .address-box {
+      background: #0f1623; border: 2px solid #1a2332; border-radius: 12px;
+      padding: 20px; margin-bottom: 25px;
+    }
+    .address-display {
+      display: flex; align-items: center; gap: 10px; margin: 15px 0;
+      background: #1a2332; padding: 15px; border-radius: 8px;
+    }
+    .address-display code { flex: 1; font-size: 14px; word-break: break-all; color: #00d4ff; }
+    .warning { color: #ffaa00; font-size: 14px; margin-top: 10px; }
+    
+    #qr-container { text-align: center; margin: 20px 0; }
+    #qr-container img { border-radius: 12px; }
+    
+    .verification-box { background: #0f1623; border-radius: 12px; padding: 20px; }
+    .verification-box input {
+      width: 100%; padding: 15px; margin: 15px 0; border-radius: 8px;
+      border: 2px solid #1a2332; background: #1a2332; color: #fff; font-size: 14px;
+    }
+    .verification-box input:focus { outline: none; border-color: #00d4ff; }
+    
+    #verify-btn {
+      width: 100%; padding: 18px; background: #00d4ff; color: #0a0e1a;
+      border: none; border-radius: 8px; font-size: 16px; font-weight: bold;
+      cursor: pointer; transition: opacity 0.3s;
+    }
+    #verify-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    #verify-btn:hover:not(:disabled) { opacity: 0.9; }
+    
+    .success { color: #00ff88; }
+    .error { color: #ff4444; }
+    .hint { color: #8899aa; font-size: 13px; margin-top: 5px; }
+    
+    #status-message { margin-top: 20px; text-align: center; }
+    #status-message a { color: #00d4ff; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>🔒 إتمام الاشتراك</h2>
+    
+    <div class="plan-selector">
+      <button onclick="selectPlan('monthly')" id="btn-monthly" class="active">
+        <h3>شهري</h3>
+        <p>9 USDT / شهر</p>
+      </button>
+      <button onclick="selectPlan('yearly')" id="btn-yearly">
+        <h3>سنوي</h3>
+        <p>99 USDT / سنة</p>
+        <span class="save">وفر 17%</span>
+      </button>
+    </div>
+    
+    <div class="network-selector">
+      <button onclick="selectNetwork('bsc')" id="net-bsc" class="active">
+        <div>
+          <strong>BSC</strong>
+          <small style="display:block;color:#8899aa">رسوم: ~$0.05</small>
+        </div>
+      </button>
+      <button onclick="selectNetwork('tron')" id="net-tron">
+        <div>
+          <strong>TRON</strong>
+          <small style="display:block;color:#8899aa">رسوم: ~$1</small>
+        </div>
+      </button>
+    </div>
+    
+    <div class="amount-box">
+      <span>المبلغ المطلوب:</span>
+      <strong id="display-amount">9 USDT</strong>
+    </div>
+    
+    <div class="address-box">
+      <p>📤 أرسل إلى هذا العنوان فقط:</p>
+      <div class="address-display">
+        <code id="crypto-address">جاري التحميل...</code>
+        <button onclick="copyAddress()" title="نسخ">📋</button>
+      </div>
+      <div id="qr-container"></div>
+      <p class="warning">⚠️ تأكد من اختيار شبكة <span id="network-name">BSC</span></p>
+    </div>
+    
+    <div class="verification-box">
+      <p>✅ بعد الإرسال، أدخل رقم المعاملة:</p>
+      <input type="text" id="tx-hash" placeholder="0x... (BSC) أو ... (TRON)" autocomplete="off">
+      <div id="tx-hint" class="hint">BscScan: ابحث عن المعاملة وانسخ الـ Tx Hash</div>
+      <button onclick="verifyPayment()" id="verify-btn" disabled>🔍 التحقق والتفعيل</button>
+      <div id="status-message"></div>
+    </div>
+  </div>
+
+  <script>
+    // ─── إعداد Supabase ───
+    const SUPABASE_URL = 'https://YOUR_PROJECT.supabase.co';
+    const SUPABASE_KEY = 'YOUR_ANON_KEY';
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // ─── عناوين الإستلام ───
+    const ADDRESSES = {
+      bsc: '0xYOUR_BSC_ADDRESS_HERE',
+      tron: 'TYOUR_TRON_ADDRESS_HERE'
+    };
+
+    const PLAN_AMOUNTS = { monthly: 9, yearly: 99 };
+    let selectedPlan = 'monthly';
+    let selectedNetwork = 'bsc';
+
+    function selectPlan(plan) {
+      selectedPlan = plan;
+      document.querySelectorAll('.plan-selector button').forEach(b => b.classList.remove('active'));
+      document.getElementById(`btn-${plan}`).classList.add('active');
+      document.getElementById('display-amount').textContent = `${PLAN_AMOUNTS[plan]} USDT`;
+    }
+
+    function selectNetwork(network) {
+      selectedNetwork = network;
+      document.querySelectorAll('.network-selector button').forEach(b => b.classList.remove('active'));
+      document.getElementById(`net-${network}`).classList.add('active');
+      
+      const address = ADDRESSES[network];
+      document.getElementById('crypto-address').textContent = address;
+      document.getElementById('network-name').textContent = network.toUpperCase();
+      
+      generateQR(address, PLAN_AMOUNTS[selectedPlan]);
+      
+      const hint = network === 'bsc' 
+        ? 'BscScan: ابحث عن المعاملة وانسخ الـ Tx Hash'
+        : 'TronScan: ابحث عن المعاملة وانسخ الـ Tx Hash';
+      document.getElementById('tx-hint').textContent = hint;
+      
+      document.getElementById('verify-btn').disabled = false;
+    }
+
+    function generateQR(address, amount) {
+      const qrData = selectedNetwork === 'bsc'
+        ? `ethereum:${address}?value=0`
+        : `tron:${address}?amount=${amount}`;
+      
+      document.getElementById('qr-container').innerHTML = 
+        `<img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(qrData)}" alt="QR Code">`;
+    }
+
+    function copyAddress() {
+      const address = document.getElementById('crypto-address').textContent;
+      navigator.clipboard.writeText(address);
+      alert('✅ تم نسخ العنوان!');
+    }
+
+    async function verifyPayment() {
+      const txHash = document.getElementById('tx-hash').value.trim();
+      const btn = document.getElementById('verify-btn');
+      const status = document.getElementById('status-message');
+      
+      if (!txHash) {
+        status.innerHTML = '<span class="error">❌ أدخل رقم المعاملة</span>';
+        return;
+      }
+      
+      if (selectedNetwork === 'bsc' && !txHash.startsWith('0x')) {
+        status.innerHTML = '<span class="error">❌ Tx Hash BSC يجب أن يبدأ بـ 0x</span>';
+        return;
+      }
+      
+      btn.disabled = true;
+      btn.textContent = '⏳ جاري التحقق...';
+      status.innerHTML = '';
+      
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        
+        if (!user) {
+          alert('يرجى تسجيل الدخول أولاً');
+          window.location.href = '/login';
+          return;
+        }
+        
+        const response = await fetch('/.netlify/functions/verify-payment', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            txHash,
+            network: selectedNetwork,
+            plan: selectedPlan,
+            userId: user.id,
+          }),
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok && result.success) {
+          status.innerHTML = `
+            <span class="success">✅ تم التفعيل بنجاح!</span><br><br>
+            <p>الخطة: ${result.subscription.plan === 'yearly' ? 'سنوية' : 'شهرية'}</p>
+            <p>تنتهي: ${new Date(result.subscription.current_period_end).toLocaleDateString('ar-SA')}</p><br>
+            <a href="/dashboard" style="color:#00d4ff;font-weight:bold">الذهاب للوحة التحكم →</a>
+          `;
+          btn.style.display = 'none';
+        } else {
+          status.innerHTML = `<span class="error">❌ ${result.error}</span>`;
+          btn.disabled = false;
+          btn.textContent = '🔍 إعادة المحاولة';
+        }
+        
+      } catch (error) {
+        status.innerHTML = `<span class="error">❌ خطأ: ${error.message}</span>`;
+        btn.disabled = false;
+        btn.textContent = '🔍 إعادة المحاولة';
+      }
+    }
+
+    // تهيئة
+    selectNetwork('bsc');
+  </script>
+</body>
+</html>

@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CoinAlert Pro - New Verified Coin Listings on Bitget Spot</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+:root{--bg-primary:#0a0e1a;--bg-secondary:#111827;--bg-card:#1a1f2e;--bg-card-hover:#222838;--bg-elevated:#232a3b;--border-color:#2a3244;--border-light:#1f2636;--text-primary:#f0f2f7;--text-secondary:#8b95a8;--text-muted:#5a6578;--accent-blue:#3b82f6;--accent-blue-glow:rgba(59,130,246,0.3);--accent-green:#22c55e;--accent-green-glow:rgba(34,197,94,0.25);--accent-purple:#8b5cf6;--accent-purple-glow:rgba(139,92,246,0.3);--accent-orange:#f59e0b;--accent-red:#ef4444;--gradient-blue:linear-gradient(135deg,#3b82f6,#2563eb);--gradient-purple:linear-gradient(135deg,#8b5cf6,#6366f1);--gradient-green:linear-gradient(135deg,#22c55e,#16a34a);--gradient-gold:linear-gradient(135deg,#f59e0b,#d97706);--shadow-sm:0 1px 2px rgba(0,0,0,0.3);--shadow-md:0 4px 12px rgba(0,0,0,0.4);--shadow-lg:0 8px 30px rgba(0,0,0,0.5);--shadow-glow-blue:0 0 30px rgba(59,130,246,0.15);--shadow-glow-green:0 0 30px rgba(34,197,94,0.15);--radius-sm:8px;--radius-md:12px;--radius-lg:16px;--radius-xl:20px;--transition:all 0.3s cubic-bezier(0.4,0,0.2,1)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg-primary);color:var(--text-primary);min-height:100vh;overflow-x:hidden;line-height:1.6}
+.bg-grid{position:fixed;top:0;left:0;width:100%;height:100%;background-image:linear-gradient(rgba(59,130,246,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(59,130,246,0.03) 1px,transparent 1px);background-size:50px 50px;pointer-events:none;z-index:0}
+.bg-glow{position:fixed;border-radius:50%;filter:blur(120px);pointer-events:none;z-index:0}
+.bg-glow-1{top:-10%;left:-5%;width:500px;height:500px;background:rgba(59,130,246,0.08);animation:float 8s ease-in-out infinite}
+.bg-glow-2{bottom:-10%;right:-5%;width:400px;height:400px;background:rgba(139,92,246,0.08);animation:float 10s ease-in-out infinite reverse}
+.bg-glow-3{top:40%;left:50%;width:300px;height:300px;background:rgba(34,197,94,0.06);animation:float 12s ease-in-out infinite 2s}
+@keyframes float{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(30px,-30px) scale(1.05)}66%{transform:translate(-20px,20px) scale(0.95)}}
+.navbar{position:fixed;top:0;left:0;right:0;height:72px;background:rgba(10,14,26,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border-light);z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:0 40px}
+.nav-brand{display:flex;align-items:center;gap:12px;font-weight:800;font-size:1.4rem;color:var(--text-primary);text-decoration:none}
+.nav-brand-icon{width:40px;height:40px;background:var(--gradient-blue);border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;font-size:1.1rem;box-shadow:0 0 20px var(--accent-blue-glow)}
+.nav-brand span{color:var(--accent-blue)}
+.nav-links{display:flex;align-items:center;gap:8px}
+.nav-link{padding:8px 16px;color:var(--text-secondary);text-decoration:none;font-weight:500;font-size:0.9rem;border-radius:var(--radius-sm);transition:var(--transition);cursor:pointer;border:none;background:none;font-family:inherit}
+.nav-link:hover,.nav-link.active{color:var(--text-primary);background:var(--bg-card)}
+.nav-link.active{color:var(--accent-blue)}
+.nav-actions{display:flex;align-items:center;gap:12px}
+.lang-selector{position:relative}
+.lang-btn{display:flex;align-items:center;gap:6px;padding:8px 14px;background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-secondary);font-size:0.85rem;font-weight:500;cursor:pointer;transition:var(--transition);font-family:inherit}
+.lang-btn:hover{border-color:var(--accent-blue);color:var(--text-primary)}
+.lang-dropdown{position:absolute;top:calc(100% + 8px);right:0;background:var(--bg-elevated);border:1px solid var(--border-color);border-radius:var(--radius-md);padding:8px;min-width:160px;box-shadow:var(--shadow-lg);opacity:0;visibility:hidden;transform:translateY(-10px);transition:var(--transition);z-index:1001}
+.lang-dropdown.show{opacity:1;visibility:visible;transform:translateY(0)}
+.lang-option{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:var(--radius-sm);cursor:pointer;transition:var(--transition);font-size:0.9rem;color:var(--text-secondary)}
+.lang-option:hover{background:var(--bg-card);color:var(--text-primary)}
+.lang-option.active{color:var(--accent-blue);background:rgba(59,130,246,0.1)}
+.lang-flag{font-size:1.1rem}
+.btn{padding:10px 22px;border-radius:var(--radius-sm);font-weight:600;font-size:0.9rem;cursor:pointer;transition:var(--transition);border:none;font-family:inherit;display:inline-flex;align-items:center;gap:8px}
+.btn-primary{background:var(--gradient-blue);color:white;box-shadow:0 4px 15px rgba(59,130,246,0.3)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 25px rgba(59,130,246,0.4)}
+.btn-outline{background:transparent;color:var(--text-secondary);border:1px solid var(--border-color)}
+.btn-outline:hover{border-color:var(--accent-blue);color:var(--accent-blue)}
+.btn-gold{background:var(--gradient-gold);color:#1a1200;box-shadow:0 4px 15px rgba(245,158,11,0.3)}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 6px 25px rgba(245,158,11,0.4)}
+.btn-green{background:var(--gradient-green);color:white;box-shadow:0 4px 15px rgba(34,197,94,0.3)}
+.btn-green:hover{transform:translateY(-2px);box-shadow:0 6px 25px rgba(34,197,94,0.4)}
+.btn-red{background:linear-gradient(135deg,#ef4444,#dc2626);color:white}
+.btn-red:hover{transform:translateY(-2px)}
+.main-content{padding-top:72px;position:relative;z-index:1}
+.hero{padding:100px 40px 80px;text-align:center;max-width:900px;margin:0 auto}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 18px;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2);border-radius:100px;color:var(--accent-green);font-size:0.85rem;font-weight:600;margin-bottom:28px;animation:pulse-badge 2s ease-in-out infinite}
+@keyframes pulse-badge{0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,0.2)}50%{box-shadow:0 0 20px 5px rgba(34,197,94,0.1)}}
+.hero-badge .dot{width:8px;height:8px;background:var(--accent-green);border-radius:50%;animation:blink 1.5s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+.hero h1{font-size:3.2rem;font-weight:800;line-height:1.15;margin-bottom:20px;background:linear-gradient(135deg,#fff 0%,#8b95a8 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero h1 span{color:var(--accent-blue);-webkit-text-fill-color:var(--accent-blue)}
+.hero p{font-size:1.15rem;color:var(--text-secondary);max-width:600px;margin:0 auto 36px;line-height:1.7}
+.hero-cta{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+.hero-cta .btn{padding:14px 32px;font-size:1rem}
+.live-ticker{background:var(--bg-secondary);border-top:1px solid var(--border-light);border-bottom:1px solid var(--border-light);padding:16px 0;overflow:hidden;position:relative}
+.live-ticker::before,.live-ticker::after{content:'';position:absolute;top:0;bottom:0;width:100px;z-index:2;pointer-events:none}
+.live-ticker::before{left:0;background:linear-gradient(90deg,var(--bg-secondary),transparent)}
+.live-ticker::after{right:0;background:linear-gradient(-90deg,var(--bg-secondary),transparent)}
+.ticker-track{display:flex;gap:40px;animation:ticker 30s linear infinite;white-space:nowrap}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.ticker-item{display:flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:0.9rem}
+.ticker-item .coin{color:var(--text-primary);font-weight:600}
+.ticker-item .price{color:var(--text-secondary)}
+.ticker-item .change-up{color:var(--accent-green)}
+.ticker-item .change-down{color:var(--accent-red)}
+.ticker-item .verified{color:var(--accent-blue);font-size:0.75rem}
+.section{padding:80px 40px;max-width:1280px;margin:0 auto}
+.section-header{text-align:center;margin-bottom:60px}
+.section-tag{display:inline-block;padding:6px 14px;background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.2);border-radius:100px;color:var(--accent-blue);font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:16px}
+.section-header h2{font-size:2.4rem;font-weight:700;margin-bottom:12px}
+.section-header p{color:var(--text-secondary);font-size:1.1rem;max-width:600px;margin:0 auto}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px}
+.feature-card{background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius-lg);padding:32px;transition:var(--transition);position:relative;overflow:hidden}
+.feature-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--gradient-blue);transform:scaleX(0);transition:var(--transition)}
+.feature-card:hover{border-color:rgba(59,130,246,0.3);transform:translateY(-4px);box-shadow:var(--shadow-glow-blue)}
+.feature-card:hover::before{transform:scaleX(1)}
+.feature-icon{width:52px;height:52px;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:20px}
+.feature-icon.blue{background:rgba(59,130,246,0.1);color:var(--accent-blue)}
+.feature-icon.green{background:rgba(34,197,94,0.1);color:var(--accent-green)}
+.feature-icon.purple{background:rgba(139,92,246,0.1);color:var(--accent-purple)}
+.feature-icon.orange{background:rgba(245,158,11,0.1);color:var(--accent-orange)}
+.feature-card h3{font-size:1.15rem;font-weight:600;margin-bottom:10px}
+.feature-card p{color:var(--text-secondary);font-size:0.95rem;line-height:1.6}
+.coins-section{background:var(--bg-secondary)}
+.coins-toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:16px}
+.coins-filters{display:flex;gap:10px;flex-wrap:wrap}
+.filter-btn{padding:8px 18px;background:var(--bg-card);border:1px solid var(--border-color);border-radius:100px;color:var(--text-secondary);font-size:0.85rem;font-weight:500;cursor:pointer;transition:var(--transition);font-family:inherit}
+.filter-btn:hover,.filter-btn.active{background:var(--accent-blue);color:white;border-color:var(--accent-blue)}
+.coins-search{display:flex;align-items:center;gap:10px;background:var(--bg-card);border:1px solid var(--border-color);border-radius:100px;padding:8px 18px;min-width:280px}
+.coins-search i{color:var(--text-muted)}
+.coins-search input{background:none;border:none;color:var(--text-primary);font-size:0.9rem;outline:none;width:100%;font-family:inherit}
+.coins-search input::placeholder{color:var(--text-muted)}
+.coins-table-wrapper{background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius-lg);overflow:hidden}
+.coins-table{width:100%;border-collapse:collapse}
+.coins-table th{padding:16px 24px;text-align:left;font-size:0.8rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;background:var(--bg-elevated);border-bottom:1px solid var(--border-color)}
+.coins-table th:last-child{text-align:center}
+.coins-table td{padding:18px 24px;border-bottom:1px solid var(--border-light);font-size:0.95rem;transition:var(--transition)}
+.coins-table tr{transition:var(--transition)}
+.coins-table tr:hover{background:var(--bg-card-hover)}
+.coins-table tr.new-coin{animation:highlight-new 3s ease-out}
+@keyframes highlight-new{0%{background:rgba(59,130,246,0.15)}100%{background:transparent}}
+.coin-cell{display:flex;align-items:center;gap:14px}
+.coin-logo{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.85rem;flex-shrink:0}
+.coin-info h4{font-weight:600;font-size:0.95rem;display:flex;align-items:center;gap:6px}
+.coin-info .symbol{color:var(--text-muted);font-size:0.85rem;font-weight:500}
+.verified-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.2);border-radius:100px;color:var(--accent-blue);font-size:0.7rem;font-weight:600}
+.price-cell{font-family:'JetBrains Mono',monospace;font-weight:600}
+.change-up{color:var(--accent-green)}
+.change-down{color:var(--accent-red)}
+.time-cell{display:flex;align-items:center;gap:6px;color:var(--text-secondary);font-size:0.9rem}
+.time-cell .new-tag{padding:2px 8px;background:var(--accent-green);color:white;border-radius:100px;font-size:0.7rem;font-weight:700;animation:blink 1s ease-in-out infinite}
+.action-cell{display:flex;justify-content:center;gap:8px}
+.action-btn{width:36px;height:36px;border-radius:var(--radius-sm);border:1px solid var(--border-color);background:var(--bg-elevated);color:var(--text-secondary);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:var(--transition);font-size:0.9rem}
+.action-btn:hover{border-color:var(--accent-blue);color:var(--accent-blue);background:rgba(59,130,246,0.1)}
+.action-btn.active{background:var(--accent-blue);color:white;border-color:var(--accent-blue)}
+.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;max-width:1000px;margin:0 auto}
+.pricing-card{background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius-xl);padding:40px 32px;text-align:center;transition:var(--transition);position:relative}
+.pricing-card:hover{transform:translateY(-6px)}
+.pricing-card.popular{border-color:var(--accent-blue);box-shadow:var(--shadow-glow-blue);transform:scale(1.03)}
+.pricing-card.popular:hover{transform:scale(1.03) translateY(-6px)}
+.popular-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);padding:6px 20px;background:var(--gradient-blue);color:white;font-size:0.8rem;font-weight:700;border-radius:100px;box-shadow:0 4px 15px rgba(59,130,246,0.3)}
+.pricing-card h3{font-size:1.3rem;font-weight:700;margin-bottom:8px}
+.pricing-card .desc{color:var(--text-secondary);font-size:0.9rem;margin-bottom:24px}
+.pricing-card .price{font-size:3rem;font-weight:800;margin-bottom:4px;display:flex;align-items:flex-start;justify-content:center;gap:4px}
+.pricing-card .price .currency{font-size:1.2rem;font-weight:600;margin-top:6px}
+.pricing-card .price .period{font-size:1rem;font-weight:500;color:var(--text-muted);margin-top:14px}
+.pricing-card .save{display:inline-block;padding:4px 12px;background:rgba(34,197,94,0.1);color:var(--accent-green);border-radius:100px;font-size:0.8rem;font-weight:600;margin-bottom:28px}
+.pricing-features{list-style:none;text-align:left;margin-bottom:32px}
+.pricing-features li{display:flex;align-items:center;gap:12px;padding:10px 0;color:var(--text-secondary);font-size:0.9rem;border-bottom:1px solid var(--border-light)}
+.pricing-features li:last-child{border-bottom:none}
+.pricing-features li i{color:var(--accent-green);font-size:0.9rem}
+.pricing-features li.disabled{color:var(--text-muted)}
+.pricing-features li.disabled i{color:var(--text-muted)}
+.pricing-card .btn{width:100%;justify-content:center;padding:14px;font-size:1rem}
+.steps-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px;max-width:1000px;margin:0 auto}
+.step-card{text-align:center;padding:32px 20px;position:relative}
+.step-number{width:56px;height:56px;background:var(--gradient-blue);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.4rem;font-weight:800;color:white;margin:0 auto 20px;box-shadow:0 4px 20px rgba(59,130,246,0.3);position:relative}
+.step-card:not(:last-child) .step-number::after{content:'';position:absolute;top:50%;left:calc(100% + 12px);width:calc(100% + 12px);height:2px;background:linear-gradient(90deg,var(--accent-blue),transparent)}
+.step-card h4{font-size:1.1rem;font-weight:600;margin-bottom:8px}
+.step-card p{color:var(--text-secondary);font-size:0.9rem}
+.notif-demo{background:var(--bg-secondary);border-radius:var(--radius-xl);padding:40px;max-width:700px;margin:0 auto;border:1px solid var(--border-color);position:relative;overflow:hidden}
+.notif-demo::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--gradient-blue)}
+.notif-demo h3{text-align:center;font-size:1.3rem;margin-bottom:24px}
+.notif-mockup{background:var(--bg-primary);border:1px solid var(--border-color);border-radius:var(--radius-lg);padding:20px;margin-bottom:20px}
+.notif-item{display:flex;align-items:center;gap:14px;padding:14px 16px;background:var(--bg-card);border-radius:var(--radius-md);margin-bottom:10px;border-left:3px solid var(--accent-green);animation:slideIn 0.5s ease-out;transition:var(--transition)}
+.notif-item:hover{background:var(--bg-card-hover)}
+@keyframes slideIn{from{opacity:0;transform:translateX(-20px)}to{opacity:1;transform:translateX(0)}}
+.notif-item .icon{width:40px;height:40px;background:rgba(34,197,94,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--accent-green);font-size:1rem;flex-shrink:0}
+.notif-item .content{flex:1}
+.notif-item .content h5{font-size:0.95rem;font-weight:600;margin-bottom:2px}
+.notif-item .content p{font-size:0.8rem;color:var(--text-muted)}
+.notif-item .time{font-size:0.75rem;color:var(--text-muted);white-space:nowrap}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:24px;max-width:900px;margin:0 auto}
+.stat-card{background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius-lg);padding:28px;text-align:center;transition:var(--transition)}
+.stat-card:hover{border-color:var(--accent-blue);transform:translateY(-2px)}
+.stat-card .number{font-size:2.4rem;font-weight:800;color:var(--accent-blue);margin-bottom:6px;font-family:'JetBrains Mono',monospace}
+.stat-card .label{color:var(--text-secondary);font-size:0.9rem}
+.footer{background:var(--bg-secondary);border-top:1px solid var(--border-light);padding:60px 40px 30px}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;max-width:1200px;margin:0 auto 40px}
+.footer-brand{max-width:300px}
+.footer-brand .nav-brand{margin-bottom:16px}
+.footer-brand p{color:var(--text-secondary);font-size:0.9rem;line-height:1.7}
+.footer-col h4{font-size:0.95rem;font-weight:600;margin-bottom:20px;color:var(--text-primary)}
+.footer-col a{display:block;color:var(--text-secondary);text-decoration:none;font-size:0.9rem;padding:6px 0;transition:var(--transition)}
+.footer-col a:hover{color:var(--accent-blue)}
+.footer-bottom{border-top:1px solid var(--border-light);padding-top:24px;text-align:center;color:var(--text-muted);font-size:0.85rem;max-width:1200px;margin:0 auto}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);z-index:2000;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:var(--transition)}
+.modal-overlay.show{opacity:1;visibility:visible}
+.modal{background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius-xl);padding:40px;max-width:480px;width:90%;transform:scale(0.95) translateY(20px);transition:var(--transition);position:relative}
+.modal-overlay.show .modal{transform:scale(1) translateY(0)}
+.modal-close{position:absolute;top:16px;right:16px;width:36px;height:36px;border-radius:50%;border:1px solid var(--border-color);background:var(--bg-elevated);color:var(--text-secondary);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:var(--transition);font-size:1rem}
+.modal-close:hover{background:var(--accent-red);color:white;border-color:var(--accent-red)}
+.modal h3{font-size:1.4rem;margin-bottom:8px}
+.modal p{color:var(--text-secondary);margin-bottom:24px;font-size:0.95rem}
+.modal-form .form-group{margin-bottom:18px}
+.modal-form label{display:block;font-size:0.85rem;font-weight:600;color:var(--text-secondary);margin-bottom:8px}
+.modal-form input,.modal-form select{width:100%;padding:12px 16px;background:var(--bg-elevated);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:0.95rem;font-family:inherit;outline:none;transition:var(--transition)}
+.modal-form input:focus,.modal-form select:focus{border-color:var(--accent-blue)}
+.modal-form input::placeholder{color:var(--text-muted)}
+.modal-form .btn{width:100%;justify-content:center;margin-top:8px}
+.modal-plan-info{background:var(--bg-elevated);border-radius:var(--radius-md);padding:16px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between}
+.modal-plan-info .plan-name{font-weight:600}
+.modal-plan-info .plan-price{font-family:'JetBrains Mono',monospace;color:var(--accent-blue);font-weight:700}
+.toast-container{position:fixed;top:90px;right:24px;z-index:3000;display:flex;flex-direction:column;gap:10px}
+.toast{background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius-md);padding:16px 20px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow-lg);min-width:300px;animation:toastIn 0.4s ease-out;position:relative;overflow:hidden}
+.toast::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px}
+.toast.success::before{background:var(--accent-green)}
+.toast.info::before{background:var(--accent-blue)}
+.toast.warning::before{background:var(--accent-orange)}
+@keyframes toastIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
+.toast i{font-size:1.1rem}
+.toast.success i{color:var(--accent-green)}
+.toast.info i{color:var(--accent-blue)}
+.toast.warning i{color:var(--accent-orange)}
+.toast-content h6{font-size:0.95rem;font-weight:600;margin-bottom:2px}
+.toast-content p{font-size:0.85rem;color:var(--text-secondary)}
+.page-section{display:none;animation:fadeIn 0.4s ease-out}
+.page-section.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.dashboard-card{background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius-lg);padding:28px;margin-bottom:20px}
+.dashboard-card h4{font-size:1rem;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.dashboard-card h4 i{color:var(--accent-blue)}
+.status-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:100px;font-size:0.85rem;font-weight:600}
+.status-active{background:rgba(34,197,94,0.1);color:var(--accent-green);border:1px solid rgba(34,197,94,0.2)}
+.status-inactive{background:rgba(239,68,68,0.1);color:var(--accent-red);border:1px solid rgba(239,68,68,0.2)}
+.progress-bar{width:100%;height:8px;background:var(--bg-elevated);border-radius:100px;overflow:hidden;margin-top:12px}
+.progress-bar .fill{height:100%;background:var(--gradient-green);border-radius:100px;transition:width 1s ease-out}
+.toggle-switch{position:relative;width:48px;height:26px;background:var(--bg-elevated);border-radius:100px;cursor:pointer;transition:var(--transition);border:1px solid var(--border-color)}
+.toggle-switch.on{background:var(--accent-green);border-color:var(--accent-green)}
+.toggle-switch::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;background:white;border-radius:50%;transition:var(--transition);box-shadow:var(--shadow-sm)}
+.toggle-switch.on::after{left:24px}
+.channel-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border-light)}
+.channel-row:last-child{border-bottom:none}
+.channel-info{display:flex;align-items:center;gap:12px}
+.channel-info i{width:36px;height:36px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:1rem}
+.channel-info i.telegram{background:rgba(59,130,246,0.1);color:var(--accent-blue)}
+.channel-info i.discord{background:rgba(139,92,246,0.1);color:var(--accent-purple)}
+.channel-info i.email{background:rgba(245,158,11,0.1);color:var(--accent-orange)}
+.channel-info i.web{background:rgba(34,197,94,0.1);color:var(--accent-green)}
+.channel-info div h5{font-size:0.95rem;font-weight:600}
+.channel-info div p{font-size:0.8rem;color:var(--text-muted)}
+.channel-row .btn-sm{padding:6px 16px;font-size:0.8rem}
+.wallet-card{background:var(--bg-elevated);border-radius:var(--radius-md);padding:20px;margin-bottom:16px}
+.wallet-card h5{font-size:0.9rem;color:var(--text-secondary);margin-bottom:8px}
+.wallet-address{display:flex;align-items:center;gap:10px;background:var(--bg-primary);border:1px solid var(--border-color);border-radius:var(--radius-sm);padding:12px 16px;font-family:'JetBrains Mono',monospace;font-size:0.85rem}
+.wallet-address button{background:none;border:none;color:var(--accent-blue);cursor:pointer;font-size:1rem;padding:4px}
+.payment-steps{margin-top:20px}
+.payment-step{display:flex;align-items:flex-start;gap:14px;padding:14px 0;border-bottom:1px solid var(--border-light)}
+.payment-step:last-child{border-bottom:none}
+.payment-step .step-num{width:28px;height:28px;background:var(--accent-blue);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;color:white;flex-shrink:0}
+.payment-step h6{font-size:0.95rem;margin-bottom:4px}
+.payment-step p{font-size:0.85rem;color:var(--text-secondary)}
+.qr-code{width:160px;height:160px;background:white;border-radius:var(--radius-md);margin:16px auto;display:flex;align-items:center;justify-content:center;color:#333;font-size:0.8rem;text-align:center;padding:10px}
+@media(max-width:768px){.navbar{padding:0 20px;height:64px}.nav-links{display:none}.hero{padding:80px 20px 60px}.hero h1{font-size:2rem}.section{padding:60px 20px}.footer-grid{grid-template-columns:1fr 1fr}.coins-toolbar{flex-direction:column;align-items:stretch}.coins-search{min-width:auto}.pricing-card.popular{transform:none}.pricing-card.popular:hover{transform:translateY(-6px)}.step-card:not(:last-child) .step-number::after{display:none}}
+@media(max-width:480px){.hero h1{font-size:1.6rem}.section-header h2{font-size:1.8rem}.footer-grid{grid-template-columns:1fr}.coins-table th,.coins-table td{padding:12px 14px;font-size:0.85rem}}
+::-webkit-scrollbar{width:8px}
+::-webkit-scrollbar-track{background:var(--bg-primary)}
+::-webkit-scrollbar-thumb{background:var(--border-color);border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:var(--text-muted)}
+</style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+<div class="bg-glow bg-glow-1"></div>
+<div class="bg-glow bg-glow-2"></div>
+<div class="bg-glow bg-glow-3"></div>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<nav class="navbar">
+    <a href="#" class="nav-brand" onclick="showPage('home')">
+        <div class="nav-brand-icon"><i class="fas fa-bell"></i></div>
+        CoinAlert <span>Pro</span>
+    </a>
+    <div class="nav-links">
+        <button class="nav-link active" data-page="home" onclick="showPage('home')">Home</button>
+        <button class="nav-link" data-page="coins" onclick="showPage('coins')">New Listings</button>
+        <button class="nav-link" data-page="pricing" onclick="showPage('pricing')">Pricing</button>
+        <button class="nav-link" data-page="dashboard" onclick="showPage('dashboard')" id="navDashboard" style="display:none">Dashboard</button>
+    </div>
+    <div class="nav-actions">
+        <div class="lang-selector">
+            <button class="lang-btn" onclick="toggleLangDropdown()">
+                <span id="currentLangFlag">🇬🇧</span>
+                <span id="currentLangName">English</span>
+                <i class="fas fa-chevron-down" style="font-size:0.7rem"></i>
+            </button>
+            <div class="lang-dropdown" id="langDropdown">
+                <div class="lang-option active" data-lang="en" onclick="changeLang('en')"><span class="lang-flag">🇬🇧</span> English</div>
+                <div class="lang-option" data-lang="ar" onclick="changeLang('ar')"><span class="lang-flag">🇸🇦</span> العربية</div>
+                <div class="lang-option" data-lang="fr" onclick="changeLang('fr')"><span class="lang-flag">🇫🇷</span> Francais</div>
+                <div class="lang-option" data-lang="es" onclick="changeLang('es')"><span class="lang-flag">🇪🇸</span> Espanol</div>
+                <div class="lang-option" data-lang="de" onclick="changeLang('de')"><span class="lang-flag">🇩🇪</span> Deutsch</div>
+                <div class="lang-option" data-lang="zh" onclick="changeLang('zh')"><span class="lang-flag">🇨🇳</span> 中文</div>
+                <div class="lang-option" data-lang="ja" onclick="changeLang('ja')"><span class="lang-flag">🇯🇵</span> 日本語</div>
+                <div class="lang-option" data-lang="tr" onclick="changeLang('tr')"><span class="lang-flag">🇹🇷</span> Turkce</div>
+            </div>
+        </div>
+        <button class="btn btn-outline" id="loginBtn" onclick="openModal('login')">Log In</button>
+        <button class="btn btn-primary" id="signupBtn" onclick="openModal('signup')">Get Started</button>
+        <button class="btn btn-outline" id="logoutBtn" style="display:none" onclick="logout()">Log Out</button>
+    </div>
+</nav>
+
+<div class="main-content">
+
+<!-- HOME PAGE -->
+<div class="page-section active" id="page-home">
+    <div class="hero">
+        <div class="hero-badge"><div class="dot"></div><span data-i18n="heroBadge">Live Monitoring Active</span></div>
+        <h1 data-i18n="heroTitle">Never Miss a <span>Verified</span> New Coin on Bitget Spot</h1>
+        <p data-i18n="heroDesc">Get real-time alerts the moment a new verified coin is listed on Bitget Spot. Stay ahead of the market with instant notifications across Telegram, Discord, Email, and Web Push.</p>
+        <div class="hero-cta">
+            <button class="btn btn-primary" onclick="showPage('pricing')"><i class="fas fa-rocket"></i> <span data-i18n="ctaStart">Start Free Trial</span></button>
+            <button class="btn btn-outline" onclick="showPage('coins')"><i class="fas fa-list"></i> <span data-i18n="ctaView">View Listings</span></button>
+        </div>
+    </div>
+
+    <div class="live-ticker"><div class="ticker-track" id="tickerTrack"></div></div>
+
+    <div class="section">
+        <div class="stats-grid">
+            <div class="stat-card"><div class="number" id="statCoins">0</div><div class="label" data-i18n="statCoins">Coins Tracked</div></div>
+            <div class="stat-card"><div class="number" id="statAlerts">0</div><div class="label" data-i18n="statAlerts">Alerts Sent Today</div></div>
+            <div class="stat-card"><div class="number" id="statUsers">0</div><div class="label" data-i18n="statUsers">Active Subscribers</div></div>
+            <div class="stat-card"><div class="number" id="statUptime">99.9%</div><div class="label" data-i18n="statUptime">Uptime</div></div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-header">
+            <div class="section-tag" data-i18n="featuresTag">Features</div>
+            <h2 data-i18n="featuresTitle">Why Choose CoinAlert Pro?</h2>
+            <p data-i18n="featuresDesc">Everything you need to stay ahead of new coin listings on Bitget Spot</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card"><div class="feature-icon blue"><i class="fas fa-bolt"></i></div><h3 data-i18n="feat1Title">Real-Time Alerts</h3><p data-i18n="feat1Desc">Receive instant notifications the second a new verified coin appears on Bitget Spot. No delays, no missed opportunities.</p></div>
+            <div class="feature-card"><div class="feature-icon green"><i class="fas fa-shield-check"></i></div><h3 data-i18n="feat2Title">Verified Only</h3><p data-i18n="feat2Desc">We only track coins with the official Bitget verification badge. Filter out noise and focus on legitimate listings.</p></div>
+            <div class="feature-card"><div class="feature-icon purple"><i class="fas fa-bell"></i></div><h3 data-i18n="feat3Title">Multi-Channel Alerts</h3><p data-i18n="feat3Desc">Get notified via Telegram bot, Discord webhook, Email, or browser push notifications. Choose what works for you.</p></div>
+            <div class="feature-card"><div class="feature-icon orange"><i class="fas fa-chart-line"></i></div><h3 data-i18n="feat4Title">Price Tracking</h3><p data-i18n="feat4Desc">Monitor initial price, 24h change, and trading volume for every new listing. Make informed decisions quickly.</p></div>
+            <div class="feature-card"><div class="feature-icon blue"><i class="fas fa-globe"></i></div><h3 data-i18n="feat5Title">Multi-Language</h3><p data-i18n="feat5Desc">Available in 8 languages including English, Arabic, French, Spanish, German, Chinese, Japanese, and Turkish.</p></div>
+            <div class="feature-card"><div class="feature-icon green"><i class="fas fa-lock"></i></div><h3 data-i18n="feat6Title">Secure Payments</h3><p data-i18n="feat6Desc">Subscribe securely with USDT (TRC-20 / BEP-20). All transactions are encrypted and processed on-chain.</p></div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-header">
+            <div class="section-tag" data-i18n="howTag">How It Works</div>
+            <h2 data-i18n="howTitle">Get Started in 4 Simple Steps</h2>
+            <p data-i18n="howDesc">From signup to your first alert in under 2 minutes</p>
+        </div>
+        <div class="steps-grid">
+<div class="step-card" id="auth-section">
+    <div class="step-number">1</div>
+    <div id="auth-content">
+        <h4>تسجيل الدخول</h4>
+        <input type="email" id="authEmail" placeholder="البريد الإلكتروني" style="width:100%;padding:10px;margin:5px 0;background:#232a3b;border:1px solid #2a3244;border-radius:8px;color:#f0f2f7;">
+        <input type="password" id="authPassword" placeholder="كلمة المرور" style="width:100%;padding:10px;margin:5px 0;background:#232a3b;border:1px solid #2a3244;border-radius:8px;color:#f0f2f7;">
+        <button onclick="signIn(document.getElementById('authEmail').value, document.getElementById('authPassword').value)" style="width:48%;padding:10px;background:#3b82f6;color:white;border:none;border-radius:8px;margin:5px 1%;">دخول</button>
+        <button onclick="signUp(document.getElementById('authEmail').value, document.getElementById('authPassword').value)" style="width:48%;padding:10px;background:#22c55e;color:white;border:none;border-radius:8px;margin:5px 1%;">تسجيل</button>
+    </div>
+</div>
+            <div class="step-card"><div class="step-number">2</div><h4 data-i18n="step2Title">Choose Plan</h4><p data-i18n="step2Desc">Pick a monthly or yearly subscription that fits your needs.</p></div>
+            <div class="step-card"><div class="step-number">3</div><h4 data-i18n="step3Title">Pay with USDT</h4><p data-i18n="step3Desc">Send USDT to the provided wallet address. Auto-confirmed.</p></div>
+            <div class="step-card"><div class="step-number">4</div><h4 data-i18n="step4Title">Receive Alerts</h4><p data-i18n="step4Desc">Connect your channels and start receiving real-time alerts.</p></div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-header">
+            <div class="section-tag" data-i18n="demoTag">Live Demo</div>
+            <h2 data-i18n="demoTitle">See Alerts in Action</h2>
+            <p data-i18n="demoDesc">This is how you will receive notifications when a new coin is listed</p>
+        </div>
+        <div class="notif-demo">
+            <h3><i class="fas fa-bell" style="color:var(--accent-blue);margin-right:8px"></i><span data-i18n="demoHeading">Recent Verified Listings</span></h3>
+            <div class="notif-mockup" id="notifMockup"></div>
+            <div style="text-align:center"><button class="btn btn-outline" onclick="simulateNewCoin()"><i class="fas fa-play"></i> <span data-i18n="demoBtn">Simulate New Listing</span></button></div>
+        </div>
+    </div>
+</div>
+
+<!-- COINS PAGE -->
+<div class="page-section" id="page-coins">
+    <div class="section">
+        <div class="section-header">
+            <div class="section-tag" data-i18n="coinsTag">New Listings</div>
+            <h2 data-i18n="coinsTitle">Verified Coin Listings</h2>
+            <p data-i18n="coinsDesc">Track all newly listed verified coins on Bitget Spot in real-time</p>
+        </div>
+        <div class="coins-toolbar">
+            <div class="coins-filters">
+                <button class="filter-btn active" data-filter="all" onclick="filterCoins('all')">All</button>
+                <button class="filter-btn" data-filter="today" onclick="filterCoins('today')">Today</button>
+                <button class="filter-btn" data-filter="week" onclick="filterCoins('week')">This Week</button>
+                <button class="filter-btn" data-filter="verified" onclick="filterCoins('verified')">Verified Only</button>
+            </div>
+            <div class="coins-search"><i class="fas fa-search"></i><input type="text" placeholder="Search coins..." id="coinSearch" oninput="searchCoins()"></div>
+        </div>
+        <div class="coins-table-wrapper">
+            <table class="coins-table">
+                <thead><tr><th data-i18n="thCoin">Coin</th><th data-i18n="thPrice">Price</th><th data-i18n="thChange">24h Change</th><th data-i18n="thVolume">Volume (24h)</th><th data-i18n="thListed">Listed</th><th data-i18n="thActions">Actions</th></tr></thead>
+                <tbody id="coinsTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- PRICING PAGE -->
+<div class="page-section" id="page-pricing">
+    <div class="section">
+        <div class="section-header">
+            <div class="section-tag" data-i18n="pricingTag">Pricing</div>
+            <h2 data-i18n="pricingTitle">Choose Your Plan</h2>
+            <p data-i18n="pricingDesc">Affordable subscriptions to keep you ahead of the market</p>
+        </div>
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <h3 data-i18n="planFreeName">Free</h3>
+                <p class="desc" data-i18n="planFreeDesc">For casual traders</p>
+                <div class="price"><span class="currency">$</span>0<span class="period" data-i18n="periodForever">/forever</span></div>
+                <div style="height:32px"></div>
+                <ul class="pricing-features">
+                    <li><i class="fas fa-check"></i> <span data-i18n="featFree1">3 alerts per day</span></li>
+                    <li><i class="fas fa-check"></i> <span data-i18n="featFree2">Web notifications only</span></li>
+                    <li><i class="fas fa-check"></i> <span data-i18n="featFree3">1-day delay on listings</span></li>
+                    <li><i class="fas fa-check"></i> <span data-i18n="featFree4">Basic coin info</span></li>
+                    <li class="disabled"><i class="fas fa-times"></i> <span data-i18n="featFree5">Telegram / Discord</span></li>
+                    <li class="disabled"><i class="fas fa-times"></i> <span data-i18n="featFree6">Email alerts</span></li>
+                    <li class="disabled"><i class="fas fa-times"></i> <span data-i18n="featFree7">Priority support</span></li>
+                </ul>
+                <button class="btn btn-outline" onclick="openModal('signup')" data-i18n="btnFree">Get Started Free</button>
+            </div>
+            <div class="pricing-card popular">
+                <div class="popular-badge" data-i18n="badgePopular">Most Popular</div>
+                <h3 data-i18n="planProName">Pro</h3>
+                <p class="desc" data-i18n="planProDesc">For active traders</p>
+                <div class="price"><span class="currency">$</span>9.99<span class="period" data-i18n="periodMonth">/month</span></div>
+                <div class="save" data-i18n="saveMonthly">Billed monthly</div>
+                <ul class="pricing-features">
+                    <li><i class="fas fa-check"></i> <span data-i18n="featPro1">Unlimited alerts</span></li>
+                    <li><i class="fas fa-check"></i> <span data-i18n="featPro2">Real-time notifications</span></li>
+                    <li><i class="fas fa-check"></i> <span data-i18n="featPro3">Telegram bot</span></li>
+                    <li><i class="fas fa-check"></i> <span data-i18n="featPro4">Discord webhook</span></li>
+                    <li><i class="fas fa-check"></i> <span data-i18n="featPro5">Email alerts</span></li>
+                    <li><i class="fas fa-check"></i> <span data-i18n="featPro6">Full coin analytics</span></li>
+                    <li class="disabled"><i class="fas fa-times"></i> <span data-i18n="featPro7">Priority support</span></li>
+                </ul>
+                <button class="btn btn-primary" onclick="subscribe('pro-monthly')" data-i18n="btnPro">Subscribe Monthly</button>
+            </div>
+            <div class="pricing-card">
+                <h3 data-i18n="planYearlyName">Pro Yearly</h3>
+                <p class="desc" data-i18n="planYearlyDesc">Best value for pros</p>
+                <div class="price"><span class="currency">$</span>79.99<span class="period" data-i18n="periodYear">/year</span></div>
+                <div class="save" data-i18n="saveYearly">Save 33% - $6.67/mo</div>
+                <ul class="pricing-features">
+                    <li><i class="fas fa-check"></i> <span data-i18n="featYearly1">Everything in Pro</span></li>
+                    <li><i class="fas fa-check"></i> <span data-i18n="featYearly2">Priority support</span></li>
+                    <li><i class="fas fa-check"></i> <span data-i18n="featYearly3">API access</span></li>
+                    <li><i class="fas fa-check"></i> <span data-i18n="featYearly4">Custom alerts</span></li>
+                    <li><i class="fas fa-check"></i> <span data-i18n="featYearly5">Early access features</span></li>
+                    <li><i class="fas fa-check"></i> <span data-i18n="featYearly6">Dedicated account</span></li>
+                    <li><i class="fas fa-check"></i> <span data-i18n="featYearly7">Cancel anytime</span></li>
+                </ul>
+                <button class="btn btn-gold" onclick="subscribe('pro-yearly')" data-i18n="btnYearly">Subscribe Yearly</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- DASHBOARD PAGE -->
+<div class="page-section" id="page-dashboard">
+    <div class="section">
+        <div class="section-header">
+            <div class="section-tag">Dashboard</div>
+            <h2>Your Alert Dashboard</h2>
+            <p>Manage your subscription and notification channels</p>
+        </div>
+        <div style="max-width:800px;margin:0 auto">
+            <div class="dashboard-card">
+                <h4><i class="fas fa-crown"></i> Subscription Status</h4>
+                <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+                    <span class="status-badge status-active" id="subStatusBadge"><i class="fas fa-circle" style="font-size:0.5rem"></i> Active</span>
+                    <span style="color:var(--text-secondary);font-size:0.9rem" id="subPlanName">Pro Monthly</span>
+                    <span style="color:var(--text-muted);font-size:0.85rem" id="subExpiry">Renews on Jul 26, 2026</span>
+                </div>
+                <div style="margin-top:16px">
+                    <div style="display:flex;justify-content:space-between;font-size:0.85rem;color:var(--text-secondary);margin-bottom:6px"><span>Subscription Period</span><span id="subProgressText">15 days remaining</span></div>
+                    <div class="progress-bar"><div class="fill" id="subProgressBar" style="width:50%"></div></div>
+                </div>
+            </div>
+            <div class="dashboard-card">
+                <h4><i class="fas fa-bell"></i> Notification Channels</h4>
+                <div class="channel-row">
+                    <div class="channel-info"><i class="fab fa-telegram telegram"></i><div><h5>Telegram Bot</h5><p>Instant alerts via Telegram</p></div></div>
+                    <div style="display:flex;align-items:center;gap:12px"><div class="toggle-switch on" id="tgToggle" onclick="toggleChannel('tg')"></div><button class="btn btn-outline btn-sm" onclick="showToast('Connect your Telegram bot to receive alerts','info')">Configure</button></div>
+                </div>
+                <div class="channel-row">
+                    <div class="channel-info"><i class="fab fa-discord discord"></i><div><h5>Discord Webhook</h5><p>Alerts to your Discord server</p></div></div>
+                    <div style="display:flex;align-items:center;gap:12px"><div class="toggle-switch" id="dcToggle" onclick="toggleChannel('dc')"></div><button class="btn btn-outline btn-sm" onclick="showToast('Enter your Discord webhook URL','info')">Configure</button></div>
+                </div>
+                <div class="channel-row">
+                    <div class="channel-info"><i class="fas fa-envelope email"></i><div><h5>Email Alerts</h5><p>Daily digest and instant alerts</p></div></div>
+                    <div style="display:flex;align-items:center;gap:12px"><div class="toggle-switch on" id="emailToggle" onclick="toggleChannel('email')"></div><button class="btn btn-outline btn-sm" onclick="showToast('Email settings updated','success')">Configure</button></div>
+                </div>
+                <div class="channel-row">
+                    <div class="channel-info"><i class="fas fa-desktop web"></i><div><h5>Web Push</h5><p>Browser notifications</p></div></div>
+                    <div style="display:flex;align-items:center;gap:12px"><div class="toggle-switch on" id="webToggle" onclick="toggleChannel('web')"></div><button class="btn btn-outline btn-sm" onclick="showToast('Web push notifications enabled','success')">Configure</button></div>
+                </div>
+            </div>
+            <div class="dashboard-card">
+                <h4><i class="fas fa-history"></i> Recent Alerts</h4>
+                <div id="alertHistory"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- PAYMENT PAGE -->
+<div class="page-section" id="page-payment">
+    <div class="section">
+        <div class="section-header">
+            <div class="section-tag">Payment</div>
+            <h2>Complete Your Subscription</h2>
+            <p>Send USDT to activate your plan</p>
+        </div>
+        <div style="max-width:600px;margin:0 auto">
+            <div class="dashboard-card">
+                <h4><i class="fas fa-wallet"></i> USDT Payment</h4>
+                <div class="modal-plan-info"><span class="plan-name" id="payPlanName">Pro Monthly</span><span class="plan-price" id="payPlanPrice">$9.99 USDT</span></div>
+                <div class="wallet-card">
+                    <h5>TRC-20 (TRON Network)</h5>
+                    <div class="wallet-address"><span id="walletTRC">TUvB5wm9jrM1dzxqBZnYcjfkShTXUhuyjY</span><button onclick="copyWallet('walletTRC')" title="Copy"><i class="fas fa-copy"></i></button></div>
+                </div>
+                <div class="wallet-card">
+                    <h5>BEP-20 (BSC Network)</h5>
+                    <div class="wallet-address"><span id="walletBEP">0x27F11D5147DDC4A23d8EC836bC4a075Ac3D37561</span><button onclick="copyWallet('walletBEP')" title="Copy"><i class="fas fa-copy"></i></button></div>
+                </div>
+                <div class="qr-code"><i class="fas fa-qrcode" style="font-size:4rem;color:#333"></i><br><span style="font-size:0.75rem">Scan to pay</span></div>
+                <div class="payment-steps">
+                    <div class="payment-step"><div class="step-num">1</div><div><h6>Copy Wallet Address</h6><p>Copy the TRC-20 or BEP-20 address above</p></div></div>
+                    <div class="payment-step"><div class="step-num">2</div><div><h6>Send USDT</h6><p>Send the exact amount from your wallet</p></div></div>
+                    <div class="payment-step"><div class="step-num">3</div><div><h6>Auto-Confirmation</h6><p>Your subscription will activate within 2 minutes</p></div></div>
+                </div>
+                <div style="margin-top:24px;display:flex;gap:12px">
+                    <button class="btn btn-primary" style="flex:1" onclick="confirmPayment()"><i class="fas fa-check-circle"></i> I Have Sent Payment</button>
+                    <button class="btn btn-outline" style="flex:1" onclick="showPage('pricing')"><i class="fas fa-arrow-left"></i> Back to Pricing</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+    <div class="footer-grid">
+        <div class="footer-brand">
+            <a href="#" class="nav-brand" onclick="showPage('home')"><div class="nav-brand-icon"><i class="fas fa-bell"></i></div>CoinAlert <span>Pro</span></a>
+            <p>Real-time alerts for new verified coin listings on Bitget Spot. Never miss an opportunity again.</p>
+        </div>
+        <div class="footer-col">
+            <h4>Product</h4>
+            <a href="#" onclick="showPage('coins')">New Listings</a>
+            <a href="#" onclick="showPage('pricing')">Pricing</a>
+            <a href="#" onclick="showPage('dashboard')">Dashboard</a>
+            <a href="#">API Docs</a>
+        </div>
+        <div class="footer-col">
+            <h4>Resources</h4>
+            <a href="#">Help Center</a>
+            <a href="#">Blog</a>
+            <a href="#">Status</a>
+            <a href="#">Changelog</a>
+        </div>
+        <div class="footer-col">
+            <h4>Legal</h4>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+            <a href="#">Refund Policy</a>
+            <a href="#">Contact</a>
+        </div>
+    </div>
+    <div class="footer-bottom"><p>2026 CoinAlert Pro. All rights reserved. Not affiliated with Bitget.</p></div>
+</div>
+
+</div>
+
+<!-- MODALS -->
+<div class="modal-overlay" id="loginModal">
+    <div class="modal">
+        <button class="modal-close" onclick="closeModal('login')"><i class="fas fa-times"></i></button>
+        <h3>Welcome Back</h3>
+        <p>Log in to access your dashboard and alerts</p>
+        <form class="modal-form" onsubmit="handleLogin(event)">
+            <div class="form-group"><label>Email Address</label><input type="email" placeholder="you@example.com" required id="loginEmail"></div>
+            <div class="form-group"><label>Password</label><input type="password" placeholder="Enter your password" required id="loginPassword"></div>
+            <button type="submit" class="btn btn-primary"><i class="fas fa-sign-in-alt"></i> Log In</button>
+        </form>
+        <p style="text-align:center;margin-top:16px;font-size:0.85rem;color:var(--text-muted)">No account? <a href="#" style="color:var(--accent-blue);text-decoration:none" onclick="closeModal('login');openModal('signup')">Sign up</a></p>
+    </div>
+</div>
+
+<div class="modal-overlay" id="signupModal">
+    <div class="modal">
+        <button class="modal-close" onclick="closeModal('signup')"><i class="fas fa-times"></i></button>
+        <h3>Create Your Account</h3>
+        <p>Start receiving alerts in under 2 minutes</p>
+        <form class="modal-form" onsubmit="handleSignup(event)">
+            <div class="form-group"><label>Full Name</label><input type="text" placeholder="John Doe" required id="signupName"></div>
+            <div class="form-group"><label>Email Address</label><input type="email" placeholder="you@example.com" required id="signupEmail"></div>
+            <div class="form-group"><label>Password</label><input type="password" placeholder="Min 8 characters" required id="signupPassword" minlength="8"></div>
+            <button type="submit" class="btn btn-primary"><i class="fas fa-user-plus"></i> Create Account</button>
+        </form>
+        <p style="text-align:center;margin-top:16px;font-size:0.85rem;color:var(--text-muted)">Already have an account? <a href="#" style="color:var(--accent-blue);text-decoration:none" onclick="closeModal('signup');openModal('login')">Log in</a></p>
+    </div>
+</div>
+
+<div class="modal-overlay" id="subModal">
+    <div class="modal">
+        <button class="modal-close" onclick="closeModal('sub')"><i class="fas fa-times"></i></button>
+        <h3>Confirm Subscription</h3>
+        <p>You are about to subscribe to the following plan</p>
+        <div class="modal-plan-info"><span class="plan-name" id="subConfirmName">Pro Monthly</span><span class="plan-price" id="subConfirmPrice">$9.99 USDT</span></div>
+        <div style="background:var(--bg-elevated);border-radius:var(--radius-md);padding:16px;margin-bottom:20px">
+            <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:8px"><i class="fas fa-info-circle" style="color:var(--accent-blue);margin-right:6px"></i> Payment Method</p>
+            <p style="font-size:0.9rem">USDT (TRC-20 / BEP-20)</p>
+        </div>
+        <button class="btn btn-primary" onclick="proceedToPayment()" style="width:100%;justify-content:center"><i class="fas fa-arrow-right"></i> Proceed to Payment</button>
+        <button class="btn btn-outline" onclick="closeModal('sub')" style="width:100%;justify-content:center;margin-top:10px">Cancel</button>
+    </div>
+</div>
+
+<script>
+const coinColors=['#3b82f6','#22c55e','#8b5cf6','#f59e0b','#ef4444','#ec4899','#06b6d4','#84cc16','#f97316','#6366f1'];
+const mockCoins=[
+    {id:1,name:'Aptos',symbol:'APT',price:6.42,change:12.5,volume:'45.2M',listed:new Date(Date.now()-2*60*1000),verified:true,logo:'AP'},
+    {id:2,name:'Sui',symbol:'SUI',price:1.23,change:-3.2,volume:'28.7M',listed:new Date(Date.now()-15*60*1000),verified:true,logo:'SU'},
+    {id:3,name:'Celestia',symbol:'TIA',price:4.87,change:8.1,volume:'19.3M',listed:new Date(Date.now()-45*60*1000),verified:true,logo:'TI'},
+    {id:4,name:'Sei',symbol:'SEI',price:0.34,change:22.4,volume:'67.1M',listed:new Date(Date.now()-2*60*60*1000),verified:true,logo:'SE'},
+    {id:5,name:'Injective',symbol:'INJ',price:18.92,change:5.7,volume:'33.8M',listed:new Date(Date.now()-5*60*60*1000),verified:true,logo:'IN'},
+    {id:6,name:'Arbitrum',symbol:'ARB',price:0.89,change:-1.5,volume:'52.4M',listed:new Date(Date.now()-8*60*60*1000),verified:true,logo:'AR'},
+    {id:7,name:'Optimism',symbol:'OP',price:1.56,change:3.8,volume:'41.2M',listed:new Date(Date.now()-12*60*60*1000),verified:true,logo:'OP'},
+    {id:8,name:'Starknet',symbol:'STRK',price:1.12,change:-5.3,volume:'15.7M',listed:new Date(Date.now()-18*60*60*1000),verified:true,logo:'ST'},
+    {id:9,name:'Manta',symbol:'MANTA',price:0.78,change:15.2,volume:'22.9M',listed:new Date(Date.now()-24*60*60*1000),verified:true,logo:'MA'},
+    {id:10,name:'Dymension',symbol:'DYM',price:2.34,change:9.6,volume:'11.4M',listed:new Date(Date.now()-36*60*60*1000),verified:true,logo:'DY'},
+    {id:11,name:'AltLayer',symbol:'ALT',price:0.45,change:-2.1,volume:'8.7M',listed:new Date(Date.now()-48*60*60*1000),verified:true,logo:'AL'},
+    {id:12,name:'Pyth',symbol:'PYTH',price:0.29,change:18.3,volume:'31.5M',listed:new Date(Date.now()-72*60*60*1000),verified:true,logo:'PY'},
+];
+const tickerCoins=[
+    {name:'APT',price:'$6.42',change:'+12.5%',up:true},{name:'SUI',price:'$1.23',change:'-3.2%',up:false},
+    {name:'TIA',price:'$4.87',change:'+8.1%',up:true},{name:'SEI',price:'$0.34',change:'+22.4%',up:true},
+    {name:'INJ',price:'$18.92',change:'+5.7%',up:true},{name:'ARB',price:'$0.89',change:'-1.5%',up:false},
+    {name:'OP',price:'$1.56',change:'+3.8%',up:true},{name:'STRK',price:'$1.12',change:'-5.3%',up:false},
+];
+
+const translations={
+    en:{heroBadge:'Live Monitoring Active',heroTitle:'Never Miss a Verified New Coin on Bitget Spot',heroDesc:'Get real-time alerts the moment a new verified coin is listed on Bitget Spot. Stay ahead of the market with instant notifications across Telegram, Discord, Email, and Web Push.',ctaStart:'Start Free Trial',ctaView:'View Listings',statCoins:'Coins Tracked',statAlerts:'Alerts Sent Today',statUsers:'Active Subscribers',statUptime:'Uptime',featuresTag:'Features',featuresTitle:'Why Choose CoinAlert Pro?',featuresDesc:'Everything you need to stay ahead of new coin listings on Bitget Spot',feat1Title:'Real-Time Alerts',feat1Desc:'Receive instant notifications the second a new verified coin appears on Bitget Spot. No delays, no missed opportunities.',feat2Title:'Verified Only',feat2Desc:'We only track coins with the official Bitget verification badge. Filter out noise and focus on legitimate listings.',feat3Title:'Multi-Channel Alerts',feat3Desc:'Get notified via Telegram bot, Discord webhook, Email, or browser push notifications. Choose what works for you.',feat4Title:'Price Tracking',feat4Desc:'Monitor initial price, 24h change, and trading volume for every new listing. Make informed decisions quickly.',feat5Title:'Multi-Language',feat5Desc:'Available in 8 languages including English, Arabic, French, Spanish, German, Chinese, Japanese, and Turkish.',feat6Title:'Secure Payments',feat6Desc:'Subscribe securely with USDT (TRC-20 / BEP-20). All transactions are encrypted and processed on-chain.',howTag:'How It Works',howTitle:'Get Started in 4 Simple Steps',howDesc:'From signup to your first alert in under 2 minutes',step1Title:'Create Account',step1Desc:'Sign up with your email in seconds. No KYC required.',step2Title:'Choose Plan',step2Desc:'Pick a monthly or yearly subscription that fits your needs.',step3Title:'Pay with USDT',step3Desc:'Send USDT to the provided wallet address. Auto-confirmed.',step4Title:'Receive Alerts',step4Desc:'Connect your channels and start receiving real-time alerts.',demoTag:'Live Demo',demoTitle:'See Alerts in Action',demoDesc:'This is how you will receive notifications when a new coin is listed',demoHeading:'Recent Verified Listings',demoBtn:'Simulate New Listing',coinsTag:'New Listings',coinsTitle:'Verified Coin Listings',coinsDesc:'Track all newly listed verified coins on Bitget Spot in real-time',thCoin:'Coin',thPrice:'Price',thChange:'24h Change',thVolume:'Volume (24h)',thListed:'Listed',thActions:'Actions',pricingTag:'Pricing',pricingTitle:'Choose Your Plan',pricingDesc:'Affordable subscriptions to keep you ahead of the market',planFreeName:'Free',planFreeDesc:'For casual traders',periodForever:'/forever',featFree1:'3 alerts per day',featFree2:'Web notifications only',featFree3:'1-day delay on listings',featFree4:'Basic coin info',featFree5:'Telegram / Discord',featFree6:'Email alerts',featFree7:'Priority support',btnFree:'Get Started Free',planProName:'Pro',planProDesc:'For active traders',periodMonth:'/month',saveMonthly:'Billed monthly',featPro1:'Unlimited alerts',featPro2:'Real-time notifications',featPro3:'Telegram bot',featPro4:'Discord webhook',featPro5:'Email alerts',featPro6:'Full coin analytics',featPro7:'Priority support',btnPro:'Subscribe Monthly',planYearlyName:'Pro Yearly',planYearlyDesc:'Best value for pros',periodYear:'/year',saveYearly:'Save 33% - $6.67/mo',featYearly1:'Everything in Pro',featYearly2:'Priority support',featYearly3:'API access',featYearly4:'Custom alerts',featYearly5:'Early access features',featYearly6:'Dedicated account',featYearly7:'Cancel anytime',btnYearly:'Subscribe Yearly',badgePopular:'Most Popular'},
+    ar:{heroBadge:'المراقبة المباشرة نشطة',heroTitle:'لا تفوت أي عملة جديدة موثقة على Bitget Spot',heroDesc:'احصل على تنبيهات فورية في اللحظة التي يتم فيها إدراج عملة جديدة موثقة على Bitget Spot.ابقَ متقدماً على السوق مع إشعارات فورية عبر Telegram و Discord و Email و Web Push.',ctaStart:'ابدأ النسخة التجريبية المجانية',ctaView:'عرض القوائم',statCoins:'العملات المتتبعة',statAlerts:'التنبيهات المرسلة اليوم',statUsers:'المشتركون النشطون',statUptime:'التوفر',featuresTag:'المميزات',featuresTitle:'لماذا تختار CoinAlert Pro؟',featuresDesc:'كل ما تحتاجه للبقاء متقدماً على قوائم العملات الجديدة على Bitget Spot',feat1Title:'تنبيهات فورية',feat1Desc:'استلم إشعارات فورية في الثانية التي تظهر فيها عملة جديدة موثقة على Bitget Spot.لا تأخير، لا فرص ضائعة.',feat2Title:'موثقة فقط',feat2Desc:'نتتبع فقط العملات التي تحمل شارة التحقق الرسمية من Bitget.تخلص من الضوضاء وركز على القوائم الشرعية.',feat3Title:'تنبيهات متعددة القنوات',feat3Desc:'احصل على إشعارات عبر بوت Telegram، webhook Discord، Email، أو إشعارات المتصفح.اختر ما يناسبك.',feat4Title:'تتبع الأسعار',feat4Desc:'راقب السعر الأولي، التغيير في 24 ساعة، وحجم التداول لكل قائمة جديدة.اتخذ قرارات مستنيرة بسرعة.',feat5Title:'متعدد اللغات',feat5Desc:'متاح بـ 8 لغات تشمل الإنجليزية، العربية، الفرنسية، الإسبانية، الألمانية، الصينية، اليابانية، والتركية.',feat6Title:'مدفوعات آمنة',feat6Desc:'اشترك بأمان باستخدام USDT (TRC-20 / BEP-20).جميع المعاملات مشفرة ومعالجة على السلسلة.',howTag:'كيف يعمل',howTitle:'ابدأ في 4 خطوات بسيطة',howDesc:'من التسجيل إلى أول تنبيه في أقل من دقيقتين',step1Title:'إنشاء حساب',step1Desc:'سجل ببريدك الإلكتروني في ثوانٍ.لا يتطلب KYC.',step2Title:'اختيار الخطة',step2Desc:'اختر اشتراك شهري أو سنوي يناسب احتياجاتك.',step3Title:'الدفع بـ USDT',step3Desc:'أرسل USDT إلى عنوان المحفظة المقدم.تأكيد تلقائي.',step4Title:'استلام التنبيهات',step4Desc:'اربط قنواتك وابدأ في استلام التنبيهات الفورية.',demoTag:'عرض مباشر',demoTitle:'شاهد التنبيهات أثناء العمل',demoDesc:'هكذا ستتلقى الإشعارات عند إدراج عملة جديدة',demoHeading:'القوائم الموثقة الأخيرة',demoBtn:'محاكاة قائمة جديدة',coinsTag:'قوائم جديدة',coinsTitle:'قوائم العملات الموثقة',coinsDesc:'تتبع جميع العملات الموثقة المدرجة حديثاً على Bitget Spot في الوقت الفعلي',thCoin:'العملة',thPrice:'السعر',thChange:'تغيير 24س',thVolume:'الحجم (24س)',thListed:'تاريخ الإدراج',thActions:'إجراءات',pricingTag:'الأسعار',pricingTitle:'اختر خطتك',pricingDesc:'اشتراكات بأسعار معقولة للبقاء متقدماً على السوق',planFreeName:'مجاني',planFreeDesc:'للمتداولين العرضيين',periodForever:'/للأبد',featFree1:'3 تنبيهات يومياً',featFree2:'إشعارات الويب فقط',featFree3:'تأخير يوم واحد على القوائم',featFree4:'معلومات أساسية عن العملة',featFree5:'Telegram / Discord',featFree6:'تنبيهات البريد',featFree7:'دعم ذو أولوية',btnFree:'ابدأ مجاناً',planProName:'برو',planProDesc:'للمتداولين النشطين',periodMonth:'/شهر',saveMonthly:'الفوترة شهرية',featPro1:'تنبيهات غير محدودة',featPro2:'إشعارات فورية',featPro3:'بوت Telegram',featPro4:'Discord webhook',featPro5:'تنبيهات البريد',featPro6:'تحليلات كاملة للعملة',featPro7:'دعم ذو أولوية',btnPro:'اشترك شهرياً',planYearlyName:'برو سنوي',planYearlyDesc:'أفضل قيمة للمحترفين',periodYear:'/سنة',saveYearly:'وفر 33% - $6.67/شهر',featYearly1:'كل شيء في برو',featYearly2:'دعم ذو أولوية',featYearly3:'وصول API',featYearly4:'تنبيهات مخصصة',featYearly5:'وصول مبكر للميزات',featYearly6:'حساب مخصص',featYearly7:'إلغاء في أي وقت',btnYearly:'اشترك سنوياً',badgePopular:'الأكثر شيوعاً'},
+    fr:{heroBadge:'Surveillance en direct active',heroTitle:'Ne manquez jamais une nouvelle piece verifiee sur Bitget Spot',heroDesc:'Recevez des alertes en temps reel des qu une nouvelle piece verifiee est liste sur Bitget Spot. Restez en avance sur le marche avec des notifications instantanees via Telegram, Discord, Email et Web Push.',ctaStart:'Commencer l essai gratuit',ctaView:'Voir les listes',statCoins:'Pieces suivies',statAlerts:'Alertes envoyees aujourd hui',statUsers:'Abonnes actifs',statUptime:'Disponibilite',featuresTag:'Fonctionnalites',featuresTitle:'Pourquoi choisir CoinAlert Pro?',featuresDesc:'Tout ce dont vous avez besoin pour rester en avance sur les nouvelles listes de pieces sur Bitget Spot',feat1Title:'Alertes en temps reel',feat1Desc:'Recevez des notifications instantanees des qu une nouvelle piece verifiee apparait sur Bitget Spot. Pas de delais, pas d opportunites manquees.',feat2Title:'Verifie uniquement',feat2Desc:'Nous ne suivons que les pieces avec le badge de verification officiel Bitget. Filtrez le bruit et concentrez-vous sur les listes legitimes.',feat3Title:'Alertes multi-canaux',feat3Desc:'Soyez notifie via bot Telegram, webhook Discord, Email ou notifications push du navigateur. Choisissez ce qui vous convient.',feat4Title:'Suivi des prix',feat4Desc:'Surveillez le prix initial, le changement 24h et le volume de trading pour chaque nouveau listing. Prenez des decisions eclairees rapidement.',feat5Title:'Multi-langue',feat5Desc:'Disponible en 8 langues dont Anglais, Arabe, Francais, Espagnol, Allemand, Chinois, Japonais et Turc.',feat6Title:'Paiements securises',feat6Desc:'Abonnez-vous en toute securite avec USDT (TRC-20 / BEP-20). Toutes les transactions sont chiffrees et traitees on-chain.',howTag:'Comment ca marche',howTitle:'Commencez en 4 etapes simples',howDesc:'De l inscription a votre premiere alerte en moins de 2 minutes',step1Title:'Creer un compte',step1Desc:'Inscrivez-vous avec votre email en quelques secondes. Pas de KYC requis.',step2Title:'Choisir un plan',step2Desc:'Choisissez un abonnement mensuel ou annuel qui correspond a vos besoins.',step3Title:'Payer avec USDT',step3Desc:'Envoyez USDT a l adresse du portefeuille fournie. Confirmation automatique.',step4Title:'Recevoir des alertes',step4Desc:'Connectez vos canaux et commencez a recevoir des alertes en temps reel.',demoTag:'Demo en direct',demoTitle:'Voir les alertes en action',demoDesc:'Voici comment vous recevrez les notifications lorsqu une nouvelle piece sera listee',demoHeading:'Listes verifiees recentes',demoBtn:'Simuler une nouvelle liste',coinsTag:'Nouvelles listes',coinsTitle:'Listes de pieces verifiees',coinsDesc:'Suivez toutes les pieces verifiees nouvellement listees sur Bitget Spot en temps reel',thCoin:'Piece',thPrice:'Prix',thChange:'Variation 24h',thVolume:'Volume (24h)',thListed:'Liste',thActions:'Actions',pricingTag:'Tarification',pricingTitle:'Choisissez votre plan',pricingDesc:'Des abonnements abordables pour rester en avance sur le marche',planFreeName:'Gratuit',planFreeDesc:'Pour les traders occasionnels',periodForever:'/pour toujours',featFree1:'3 alertes par jour',featFree2:'Notifications web uniquement',featFree3:'Delai de 1 jour sur les listes',featFree4:'Infos de base sur la piece',featFree5:'Telegram / Discord',featFree6:'Alertes email',featFree7:'Support prioritaire',btnFree:'Commencer gratuitement',planProName:'Pro',planProDesc:'Pour les traders actifs',periodMonth:'/mois',saveMonthly:'Facturation mensuelle',featPro1:'Alertes illimitees',featPro2:'Notifications en temps reel',featPro3:'Bot Telegram',featPro4:'Webhook Discord',featPro5:'Alertes email',featPro6:'Analyses completes',featPro7:'Support prioritaire',btnPro:'Abonnement mensuel',planYearlyName:'Pro Annuel',planYearlyDesc:'Meilleure valeur pour les pros',periodYear:'/an',saveYearly:'Economisez 33% - $6.67/mois',featYearly1:'Tout dans Pro',featYearly2:'Support prioritaire',featYearly3:'Acces API',featYearly4:'Alertes personnalisees',featYearly5:'Acces anticipe aux fonctionnalites',featYearly6:'Compte dedie',featYearly7:'Annulation a tout moment',btnYearly:'Abonnement annuel',badgePopular:'Le plus populaire'},
+    es:{heroBadge:'Monitoreo en vivo activo',heroTitle:'Nunca pierdas una moneda nueva verificada en Bitget Spot',heroDesc:'Recibe alertas en tiempo real en el momento en que se lista una nueva moneda verificada en Bitget Spot. Mantente por delante del mercado con notificaciones instantaneas a traves de Telegram, Discord, Email y Web Push.',ctaStart:'Iniciar prueba gratuita',ctaView:'Ver listados',statCoins:'Monedas rastreadas',statAlerts:'Alertas enviadas hoy',statUsers:'Suscriptores activos',statUptime:'Tiempo de actividad',featuresTag:'Caracteristicas',featuresTitle:'Por que elegir CoinAlert Pro?',featuresDesc:'Todo lo que necesitas para mantenerte por delante de los nuevos listados de monedas en Bitget Spot',feat1Title:'Alertas en tiempo real',feat1Desc:'Recibe notificaciones instantaneas en el segundo en que aparece una nueva moneda verificada en Bitget Spot. Sin retrasos, sin oportunidades perdidas.',feat2Title:'Solo verificadas',feat2Desc:'Solo rastreamos monedas con la insignia de verificacion oficial de Bitget. Filtra el ruido y enfocate en listados legitimos.',feat3Title:'Alertas multi-canal',feat3Desc:'Recibe notificaciones via bot de Telegram, webhook de Discord, Email o notificaciones push del navegador. Elige lo que funciona para ti.',feat4Title:'Seguimiento de precios',feat4Desc:'Monitorea el precio inicial, cambio 24h y volumen de trading para cada nuevo listado. Toma decisiones informadas rapidamente.',feat5Title:'Multi-idioma',feat5Desc:'Disponible en 8 idiomas incluyendo Ingles, Arabe, Frances, Espanol, Aleman, Chino, Japones y Turco.',feat6Title:'Pagos seguros',feat6Desc:'Suscribete de forma segura con USDT (TRC-20 / BEP-20). Todas las transacciones estan encriptadas y procesadas on-chain.',howTag:'Como funciona',howTitle:'Comienza en 4 pasos simples',howDesc:'Desde el registro hasta tu primera alerta en menos de 2 minutos',step1Title:'Crear cuenta',step1Desc:'Registrate con tu email en segundos. No se requiere KYC.',step2Title:'Elegir plan',step2Desc:'Elige una suscripcion mensual o anual que se ajuste a tus necesidades.',step3Title:'Pagar con USDT',step3Desc:'Envia USDT a la direccion de billetera proporcionada. Confirmacion automatica.',step4Title:'Recibir alertas',step4Desc:'Conecta tus canales y comienza a recibir alertas en tiempo real.',demoTag:'Demo en vivo',demoTitle:'Ve las alertas en accion',demoDesc:'Asi es como recibiras las notificaciones cuando se liste una nueva moneda',demoHeading:'Listados verificados recientes',demoBtn:'Simular nuevo listado',coinsTag:'Nuevos listados',coinsTitle:'Listados de monedas verificadas',coinsDesc:'Rastrea todas las monedas verificadas recientemente listadas en Bitget Spot en tiempo real',thCoin:'Moneda',thPrice:'Precio',thChange:'Cambio 24h',thVolume:'Volumen (24h)',thListed:'Listado',thActions:'Acciones',pricingTag:'Precios',pricingTitle:'Elige tu plan',pricingDesc:'Suscripciones asequibles para mantenerte por delante del mercado',planFreeName:'Gratis',planFreeDesc:'Para traders ocasionales',periodForever:'/para siempre',featFree1:'3 alertas por dia',featFree2:'Solo notificaciones web',featFree3:'Retraso de 1 dia en listados',featFree4:'Info basica de moneda',featFree5:'Telegram / Discord',featFree6:'Alertas de email',featFree7:'Soporte prioritario',btnFree:'Empezar gratis',planProName:'Pro',planProDesc:'Para traders activos',periodMonth:'/mes',saveMonthly:'Facturacion mensual',featPro1:'Alertas ilimitadas',featPro2:'Notificaciones en tiempo real',featPro3:'Bot de Telegram',featPro4:'Webhook de Discord',featPro5:'Alertas de email',featPro6:'Analiticas completas',featPro7:'Soporte prioritario',btnPro:'Suscribirse mensual',planYearlyName:'Pro Anual',planYearlyDesc:'Mejor valor para profesionales',periodYear:'/ano',saveYearly:'Ahorra 33% - $6.67/mes',featYearly1:'Todo en Pro',featYearly2:'Soporte prioritario',featYearly3:'Acceso API',featYearly4:'Alertas personalizadas',featYearly5:'Acceso anticipado a funciones',featYearly6:'Cuenta dedicada',featYearly7:'Cancelar en cualquier momento',btnYearly:'Suscribirse anual',badgePopular:'Mas popular'},
+    de:{heroBadge:'Live-Monitoring aktiv',heroTitle:'Verpassen Sie nie eine verifizierte neue Munze auf Bitget Spot',heroDesc:'Erhalten Sie Echtzeit-Benachrichtigungen, sobald eine neue verifizierte Munze auf Bitget Spot gelistet wird. Bleiben Sie mit sofortigen Benachrichtigungen uber Telegram, Discord, E-Mail und Web Push dem Markt voraus.',ctaStart:'Kostenlose Testversion starten',ctaView:'Listings anzeigen',statCoins:'Verfolgte Munzen',statAlerts:'Heute gesendete Alerts',statUsers:'Aktive Abonnenten',statUptime:'Verfugbarkeit',featuresTag:'Funktionen',featuresTitle:'Warum CoinAlert Pro wahlen?',featuresDesc:'Alles was Sie brauchen, um neue Munzlistings auf Bitget Spot voraus zu sein',feat1Title:'Echtzeit-Alerts',feat1Desc:'Erhalten Sie sofortige Benachrichtigungen, sobald eine neue verifizierte Munze auf Bitget Spot erscheint. Keine Verzogerungen, keine verpassten Chancen.',feat2Title:'Nur verifiziert',feat2Desc:'Wir verfolgen nur Munzen mit dem offiziellen Bitget-Verifizierungsabzeichen. Filtern Sie Rauschen heraus und konzentrieren Sie sich auf legitime Listings.',feat3Title:'Multi-Channel Alerts',feat3Desc:'Werden Sie uber Telegram-Bot, Discord-Webhook, E-Mail oder Browser-Push-Benachrichtigungen informiert. Wahlen Sie, was fur Sie funktioniert.',feat4Title:'Preisverfolgung',feat4Desc:'Uberwachen Sie den Anfangspreis, die 24h-Anderung und das Handelsvolumen fur jedes neue Listing. Treffen Sie schnell fundierte Entscheidungen.',feat5Title:'Mehrsprachig',feat5Desc:'Verfugbar in 8 Sprachen einschliesslich Englisch, Arabisch, Franzosisch, Spanisch, Deutsch, Chinesisch, Japanisch und Turkisch.',feat6Title:'Sichere Zahlungen',feat6Desc:'Abonnieren Sie sicher mit USDT (TRC-20 / BEP-20). Alle Transaktionen sind verschlusselt und on-chain verarbeitet.',howTag:'So funktioniert es',howTitle:'In 4 einfachen Schritten starten',howDesc:'Von der Anmeldung bis zu Ihrem ersten Alert in unter 2 Minuten',step1Title:'Konto erstellen',step1Desc:'Melden Sie sich in Sekunden mit Ihrer E-Mail an. Kein KYC erforderlich.',step2Title:'Plan wahlen',step2Desc:'Wahlen Sie ein monatliches oder jahrliches Abonnement, das zu Ihren Bedurfnissen passt.',step3Title:'Mit USDT bezahlen',step3Desc:'Senden Sie USDT an die bereitgestellte Wallet-Adresse. Automatische Bestatigung.',step4Title:'Alerts empfangen',step4Desc:'Verbinden Sie Ihre Kanale und beginnen Sie, Echtzeit-Alerts zu erhalten.',demoTag:'Live-Demo',demoTitle:'Sehen Sie Alerts in Aktion',demoDesc:'So erhalten Sie Benachrichtigungen, wenn eine neue Munze gelistet wird',demoHeading:'Neueste verifizierte Listings',demoBtn:'Neues Listing simulieren',coinsTag:'Neue Listings',coinsTitle:'Verifizierte Munzlistings',coinsDesc:'Verfolgen Sie alle neu gelisteten verifizierten Munzen auf Bitget Spot in Echtzeit',thCoin:'Munze',thPrice:'Preis',thChange:'24h-Anderung',thVolume:'Volumen (24h)',thListed:'Gelistet',thActions:'Aktionen',pricingTag:'Preise',pricingTitle:'Wahlen Sie Ihren Plan',pricingDesc:'Erschwingliche Abonnements, um dem Markt voraus zu sein',planFreeName:'Kostenlos',planFreeDesc:'Fur Gelegenheitshandler',periodForever:'/fur immer',featFree1:'3 Alerts pro Tag',featFree2:'Nur Web-Benachrichtigungen',featFree3:'1 Tag Verzogerung bei Listings',featFree4:'Grundlegende Munzinfo',featFree5:'Telegram / Discord',featFree6:'E-Mail-Alerts',featFree7:'Prioritats-Support',btnFree:'Kostenlos starten',planProName:'Pro',planProDesc:'Fur aktive Handler',periodMonth:'/Monat',saveMonthly:'Monatliche Abrechnung',featPro1:'Unbegrenzte Alerts',featPro2:'Echtzeit-Benachrichtigungen',featPro3:'Telegram-Bot',featPro4:'Discord-Webhook',featPro5:'E-Mail-Alerts',featPro6:'Vollstandige Analytik',featPro7:'Prioritats-Support',btnPro:'Monatlich abonnieren',planYearlyName:'Pro Jahrlich',planYearlyDesc:'Bester Wert fur Profis',periodYear:'/Jahr',saveYearly:'33% sparen - $6.67/Monat',featYearly1:'Alles in Pro',featYearly2:'Prioritats-Support',featYearly3:'API-Zugang',featYearly4:'Benutzerdefinierte Alerts',featYearly5:'Fruher Zugang zu Funktionen',featYearly6:'Dediziertes Konto',featYearly7:'Jederzeit kundbar',btnYearly:'Jahrlich abonnieren',badgePopular:'Am beliebtesten'},
+    zh:{heroBadge:'实时监控中',heroTitle:'不错过Bitget Spot上的任何新验证币种',heroDesc:'当新的验证币种在Bitget Spot上列出时，立即获得实时提醒。通过Telegram、Discord、Email和Web Push即时通知，始终领先市场。',ctaStart:'开始免费试用',ctaView:'查看列表',statCoins:'追踪币种',statAlerts:'今日发送提醒',statUsers:'活跃订阅者',statUptime:'正常运行时间',featuresTag:'功能',featuresTitle:'为什么选择CoinAlert Pro？',featuresDesc:'您在Bitget Spot上领先新币种列表所需的一切',feat1Title:'实时提醒',feat1Desc:'当新的验证币种出现在Bitget Spot上时，立即收到通知。无延迟，不错过任何机会。',feat2Title:'仅验证币种',feat2Desc:'我们只追踪带有官方Bitget验证徽章的币种。过滤噪音，专注于合法列表。',feat3Title:'多渠道提醒',feat3Desc:'通过Telegram机器人、Discord webhook、Email或浏览器推送通知获取提醒。选择适合您的方式。',feat4Title:'价格追踪',feat4Desc:'监控每个新列表的初始价格、24小时变化和交易量。快速做出明智决策。',feat5Title:'多语言',feat5Desc:'支持8种语言，包括英语、阿拉伯语、法语、西班牙语、德语、中文、日语和土耳其语。',feat6Title:'安全支付',feat6Desc:'使用USDT（TRC-20 / BEP-20）安全订阅。所有交易均加密并在链上处理。',howTag:'工作原理',howTitle:'4个简单步骤开始使用',howDesc:'从注册到第一个提醒不到2分钟',step1Title:'创建账户',step1Desc:'几秒钟内用邮箱注册。无需KYC。',step2Title:'选择方案',step2Desc:'选择适合您需求的月度或年度订阅。',step3Title:'用USDT支付',step3Desc:'将USDT发送到提供的钱包地址。自动确认。',step4Title:'接收提醒',step4Desc:'连接您的频道并开始接收实时提醒。',demoTag:'实时演示',demoTitle:'查看提醒效果',demoDesc:'当新币种列出时，您将这样收到通知',demoHeading:'最近验证的列表',demoBtn:'模拟新列表',coinsTag:'新列表',coinsTitle:'验证币种列表',coinsDesc:'实时追踪Bitget Spot上所有新列出的验证币种',thCoin:'币种',thPrice:'价格',thChange:'24h变化',thVolume:'交易量(24h)',thListed:'列出时间',thActions:'操作',pricingTag:'定价',pricingTitle:'选择您的方案',pricingDesc:'实惠的订阅让您领先市场',planFreeName:'免费',planFreeDesc:'适合休闲交易者',periodForever:'/永久',featFree1:'每天3条提醒',featFree2:'仅网页通知',featFree3:'列表延迟1天',featFree4:'基础币种信息',featFree5:'Telegram / Discord',featFree6:'邮件提醒',featFree7:'优先支持',btnFree:'免费开始',planProName:'专业版',planProDesc:'适合活跃交易者',periodMonth:'/月',saveMonthly:'按月计费',featPro1:'无限提醒',featPro2:'实时通知',featPro3:'Telegram机器人',featPro4:'Discord webhook',featPro5:'邮件提醒',featPro6:'完整币种分析',featPro7:'优先支持',btnPro:'订阅月度',planYearlyName:'专业版年度',planYearlyDesc:'专业人士的最佳价值',periodYear:'/年',saveYearly:'节省33% - $6.67/月',featYearly1:'专业版全部功能',featYearly2:'优先支持',featYearly3:'API访问',featYearly4:'自定义提醒',featYearly5:'抢先体验功能',featYearly6:'专属账户',featYearly7:'随时取消',btnYearly:'订阅年度',badgePopular:'最受欢迎'},
+    ja:{heroBadge:'ライブ監視アクティブ',heroTitle:'Bitget Spotの新規検証済みコインを見逃さない',heroDesc:'Bitget Spotに新しい検証済みコインが上場された瞬間にリアルタイムアラートを受信。Telegram、Discord、Email、Web Pushで即座に通知を受け取り、市場を先取りしましょう。',ctaStart:'無料トライアル開始',ctaView:'リストを表示',statCoins:'追跡中のコイン',statAlerts:'本日送信されたアラート',statUsers:'アクティブ購読者',statUptime:'稼働時間',featuresTag:'機能',featuresTitle:'CoinAlert Proを選ぶ理由',featuresDesc:'Bitget Spotの新規コイン上場を先取りするために必要なすべて',feat1Title:'リアルタイムアラート',feat1Desc:'Bitget Spotに新しい検証済みコインが表示された瞬間に即座に通知を受信。遅延なし、機会を逃さない。',feat2Title:'検証済みのみ',feat2Desc:'公式Bitget検証バッジのあるコインのみを追跡。ノイズを除外し、正当な上場に集中。',feat3Title:'マルチチャネルアラート',feat3Desc:'Telegramボット、Discord webhook、Email、ブラウザプッシュ通知で通知を受信。あなたに合った方法を選択。',feat4Title:'価格追跡',feat4Desc:'各新規上場の初期価格、24時間変動、取引量を監視。迅速に情報に基づいた決定を下す。',feat5Title:'多言語対応',feat5Desc:'英語、アラビア語、フランス語、スペイン語、ドイツ語、中国語、日本語、トルコ語を含む8言語で利用可能。',feat6Title:'安全な支払い',feat6Desc:'USDT（TRC-20 / BEP-20）で安全に購読。すべての取引は暗号化され、オンチェーンで処理されます。',howTag:'使い方',howTitle:'4つの簡単なステップで開始',howDesc:'登録から最初のアラートまで2分以内',step1Title:'アカウント作成',step1Desc:'メールですぐに登録。KYC不要。',step2Title:'プラン選択',step2Desc:'ニーズに合った月次または年次サブスクリプションを選択。',step3Title:'USDTで支払い',step3Desc:'提供されたウォレットアドレスにUSDTを送信。自動確認。',step4Title:'アラートを受信',step4Desc:'チャンネルを接続し、リアルタイムアラートの受信を開始。',demoTag:'ライブデモ',demoTitle:'アラートの動作を見る',demoDesc:'新しいコインが上場されたときに通知を受信する方法です',demoHeading:'最近の検証済み上場',demoBtn:'新規上場をシミュレート',coinsTag:'新規上場',coinsTitle:'検証済みコインリスト',coinsDesc:'Bitget Spotの新規上場検証済みコインをリアルタイムで追跡',thCoin:'コイン',thPrice:'価格',thChange:'24時間変動',thVolume:'取引量(24h)',thListed:'上場日',thActions:'アクション',pricingTag:'料金',pricingTitle:'プランを選択',pricingDesc:'市場を先取りするための手頃なサブスクリプション',planFreeName:'無料',planFreeDesc:'カジュアルトレーダー向け',periodForever:'/永久',featFree1:'1日3アラート',featFree2:'Web通知のみ',featFree3:'上場1日遅延',featFree4:'基本コイン情報',featFree5:'Telegram / Discord',featFree6:'メールアラート',featFree7:'優先サポート',btnFree:'無料で開始',planProName:'Pro',planProDesc:'アクティブトレーダー向け',periodMonth:'/月',saveMonthly:'月額請求',featPro1:'無制限アラート',featPro2:'リアルタイム通知',featPro3:'Telegramボット',featPro4:'Discord webhook',featPro5:'メールアラート',featPro6:'完全な分析',featPro7:'優先サポート',btnPro:'月額で購読',planYearlyName:'Pro年間',planYearlyDesc:'プロ向け最高の価値',periodYear:'/年',saveYearly:'33%節約 - $6.67/月',featYearly1:'Proのすべて',featYearly2:'優先サポート',featYearly3:'APIアクセス',featYearly4:'カスタムアラート',featYearly5:'機能への早期アクセス',featYearly6:'専用アカウント',featYearly7:'いつでも解約可能',btnYearly:'年額で購読',badgePopular:'最も人気'},
+    tr:{heroBadge:'Canli Izleme Aktif',heroTitle:'Bitget Spot taki Dogrulanmis Yeni Bir Koini Kacirma',heroDesc:'Bitget Spot ta yeni bir dogrulanmis koin listelendigi anda gercek zamanli uyari alin. Telegram, Discord, E-posta ve Web Push uzerinden aninda bildirimlerle piyasanin onunde olun.',ctaStart:'Ucretsiz Deneme Baslat',ctaView:'Listeleri Goruntule',statCoins:'Takip Edilen Koinler',statAlerts:'Bugun Gonderilen Uyarilar',statUsers:'Aktif Aboneler',statUptime:'Calisma Suresi',featuresTag:'Ozellikler',featuresTitle:'Neden CoinAlert Pro?',featuresDesc:'Bitget Spot taki yeni koin listelerinin onunde olmak icin ihtiyaciniz olan her sey',feat1Title:'Gercek Zamanli Uyarilar',feat1Desc:'Bitget Spot ta yeni bir dogrulanmis koin gorundugu anda aninda bildirim alin. Gecikme yok, kacirilmis frsat yok.',feat2Title:'Sadece Dogrulanmis',feat2Desc:'Sadece resmi Bitget dogrulama rozetine sahip koinleri takip ediyoruz. Gurultuyu filtreleyin ve gecerli listelere odaklanin.',feat3Title:'Cok Kanalli Uyarilar',feat3Desc:'Telegram botu, Discord webhook, E-posta veya tarayici aninda bildirimleri araciligiyla bilgilendirilin. Size uygun olani secin.',feat4Title:'Fiyat Takibi',feat4Desc:'Her yeni liste icin baslangic fiyati, 24 saatlik degisim ve islem hacmini izleyin. Hizli ve bilincli kararlar alin.',feat5Title:'Cok Dilli',feat5Desc:'Ingilizce, Arapca, Fransizca, Ispanyolca, Almanca, Cince, Japonca ve Turkce dahil 8 dilde mevcut.',feat6Title:'Guvenli Odemeler',feat6Desc:'USDT (TRC-20 / BEP-20) ile guvenle abone olun. Tum islemler sifrelenmis ve zincir uzerinde islenir.',howTag:'Nasil Calisir',howTitle:'4 Basit Adimda Baslayin',howDesc:'Kayittan ilk uyariza 2 dakikadan az surede',step1Title:'Hesap Olustur',step1Desc:'Saniyeler icinde e-postanizla kaydolun. KYC gerekmez.',step2Title:'Plan Sec',step2Desc:'Ihtiyaclariniza uygun aylik veya yillik bir abonelik secin.',step3Title:'USDT ile Ode',step3Desc:'USDT yi saglanan cuzdan adresine gonderin. Otomatik onay.',step4Title:'Uyari Al',step4Desc:'Kanallarinizi baglayin ve gercek zamanli uyari almaya baslayin.',demoTag:'Canli Demo',demoTitle:'Uyarilari Eylemde Gorun',demoDesc:'Yeni bir koin listelendiginde bildirimleri nasil alacaginiz budur',demoHeading:'Son Dogrulanmis Listeler',demoBtn:'Yeni Liste Simule Et',coinsTag:'Yeni Listeler',coinsTitle:'Dogrulanmis Koin Listeleri',coinsDesc:'Bitget Spot taki tum yeni listelenen dogrulanmis koinleri gercek zamanli takip edin',thCoin:'Koin',thPrice:'Fiyat',thChange:'24s Degisim',thVolume:'Hacim (24s)',thListed:'Listelenme',thActions:'Eylemler',pricingTag:'Fiyatlandirma',pricingTitle:'Planinizi Secin',pricingDesc:'Piyasanin onunde olmak icin uygun fiyatli abonelikler',planFreeName:'Ucretsiz',planFreeDesc:'Gundelik yatirimcilar icin',periodForever:'/sonsuz',featFree1:'Gunde 3 uyari',featFree2:'Sadece web bildirimleri',featFree3:'Listelerde 1 gun gecikme',featFree4:'Temel koin bilgisi',featFree5:'Telegram / Discord',featFree6:'E-posta uyarilari',featFree7:'Oncelikli destek',btnFree:'Ucretsiz Basla',planProName:'Pro',planProDesc:'Aktif yatirimcilar icin',periodMonth:'/ay',saveMonthly:'Aylik faturalandirma',featPro1:'Sinirsiz uyari',featPro2:'Gercek zamanli bildirimler',featPro3:'Telegram botu',featPro4:'Discord webhook',featPro5:'E-posta uyarilari',featPro6:'Tam koin analitigi',featPro7:'Oncelikli destek',btnPro:'Aylik Abone Ol',planYearlyName:'Pro Yillik',planYearlyDesc:'Profesyoneller icin en iyi deger',periodYear:'/yil',saveYearly:'%33 tasarruf - $6.67/ay',featYearly1:'Pro daki her sey',featYearly2:'Oncelikli destek',featYearly3:'API erisimi',featYearly4:'Ozel uyarilar',featYearly5:'Erken erisim ozellikleri',featYearly6:'Ozel hesap',featYearly7:'Istediginiz zaman iptal',btnYearly:'Yillik Abone Ol',badgePopular:'En Populer'}
+};
+
+let currentLang='en',currentUser=null,selectedPlan=null,coins=[...mockCoins],currentFilter='all',watchlist=new Set();
+
+document.addEventListener('DOMContentLoaded',()=>{initTicker();renderCoinsTable();renderNotifMockup();animateStats();updateTranslations();setInterval(()=>{if(Math.random()>0.7)simulateNewCoin()},30000)});
+
+function showPage(page){document.querySelectorAll('.page-section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));document.getElementById('page-'+page).classList.add('active');document.querySelector('.nav-link[data-page="'+page+'"]').classList.add('active');window.scrollTo({top:0,behavior:'smooth'})}
+
+function toggleLangDropdown(){document.getElementById('langDropdown').classList.toggle('show')}
+
+function changeLang(lang){currentLang=lang;document.querySelectorAll('.lang-option').forEach(o=>o.classList.remove('active'));document.querySelector('.lang-option[data-lang="'+lang+'"]').classList.add('active');const flags={en:'🇬🇧',ar:'🇸🇦',fr:'🇫🇷',es:'🇪🇸',de:'🇩🇪',zh:'🇨🇳',ja:'🇯🇵',tr:'🇹🇷'};const names={en:'English',ar:'العربية',fr:'Francais',es:'Espanol',de:'Deutsch',zh:'中文',ja:'日本語',tr:'Turkce'};document.getElementById('currentLangFlag').textContent=flags[lang];document.getElementById('currentLangName').textContent=names[lang];document.getElementById('langDropdown').classList.remove('show');updateTranslations();showToast('Language changed to '+names[lang],'success')}
+
+function updateTranslations(){const t=translations[currentLang];if(!t)return;document.querySelectorAll('[data-i18n]').forEach(el=>{const key=el.getAttribute('data-i18n');if(t[key])el.textContent=t[key]});document.body.style.direction=currentLang==='ar'?'rtl':'ltr'}
+
+document.addEventListener('click',e=>{if(!e.target.closest('.lang-selector'))document.getElementById('langDropdown').classList.remove('show')});
+
+function initTicker(){const track=document.getElementById('tickerTrack');let html='';const items=[...tickerCoins,...tickerCoins];items.forEach(c=>{html+='<div class="ticker-item"><span class="coin">'+c.name+'</span><span class="price">'+c.price+'</span><span class="'+(c.up?'change-up':'change-down')+'">'+c.change+'</span><span class="verified"><i class="fas fa-check-circle"></i></span></div>'});track.innerHTML=html}
+
+function renderCoinsTable(){const tbody=document.getElementById('coinsTableBody');const search=(document.getElementById('coinSearch')?.value||'').toLowerCase();const now=new Date();let filtered=coins.filter(c=>{if(search&&!c.name.toLowerCase().includes(search)&&!c.symbol.toLowerCase().includes(search))return false;if(currentFilter==='today')return(now-c.listed)<24*60*60*1000;if(currentFilter==='week')return(now-c.listed)<7*24*60*60*1000;if(currentFilter==='verified')return c.verified;return true});tbody.innerHTML=filtered.map(c=>{const timeAgo=getTimeAgo(c.listed);const isNew=(now-c.listed)<10*60*1000;const color=coinColors[c.id%coinColors.length];return'<tr class="'+(isNew?'new-coin':'')+'"><td><div class="coin-cell"><div class="coin-logo" style="background:'+color+'20;color:'+color+';">'+c.logo+'</div><div class="coin-info"><h4>'+c.name+' <span class="verified-badge"><i class="fas fa-check-circle"></i> Verified</span></h4><span class="symbol">'+c.symbol+'/USDT</span></div></div></td><td class="price-cell">$'+c.price.toFixed(c.price<1?4:2)+'</td><td class="'+(c.change>=0?'change-up':'change-down')+'">'+(c.change>=0?'+':'')+c.change+'%</td><td>$'+c.volume+'</td><td><div class="time-cell">'+(isNew?'<span class="new-tag">NEW</span>':'')+timeAgo+'</div></td><td class="action-cell"><button class="action-btn '+(watchlist.has(c.id)?'active':'')+'" onclick="toggleWatchlist('+c.id+')" title="Watchlist"><i class="fas fa-bell"></i></button><button class="action-btn" onclick="window.open('https://www.bitget.com/spot/'+c.symbol+'USDT','_blank')" title="View on Bitget"><i class="fas fa-external-link-alt"></i></button></td></tr>'}).join('')}
+
+function filterCoins(filter){currentFilter=filter;document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));document.querySelector('.filter-btn[data-filter="'+filter+'"]').classList.add('active');renderCoinsTable()}
+
+function searchCoins(){renderCoinsTable()}
+
+function toggleWatchlist(id){if(watchlist.has(id)){watchlist.delete(id);showToast('Removed from watchlist','info')}else{watchlist.add(id);showToast('Added to watchlist. You will receive alerts for this coin.','success')}renderCoinsTable()}
+
+function getTimeAgo(date){const seconds=Math.floor((new Date()-date)/1000);if(seconds<60)return'Just now';const minutes=Math.floor(seconds/60);if(minutes<60)return minutes+'m ago';const hours=Math.floor(minutes/60);if(hours<24)return hours+'h ago';return Math.floor(hours/24)+'d ago'}
+
+function renderNotifMockup(){const container=document.getElementById('notifMockup');const recent=coins.slice(0,3);container.innerHTML=recent.map(c=>{const color=coinColors[c.id%coinColors.length];return'<div class="notif-item"><div class="icon"><i class="fas fa-rocket"></i></div><div class="content"><h5>'+c.name+' ('+c.symbol+') listed on Bitget Spot</h5><p>Initial price: $'+c.price+' | 24h: '+(c.change>=0?'+':'')+c.change+'%</p></div><span class="time">'+getTimeAgo(c.listed)+'</span></div>'}).join('')}
+
+function simulateNewCoin(){const newCoins=[{name:'Monad',symbol:'MON',price:0.85,change:45.2},{name:'Berachain',symbol:'BERA',price:2.34,change:28.7},{name:'Story Protocol',symbol:'STORY',price:1.56,change:33.1},{name:'MegaETH',symbol:'MEGA',price:0.42,change:67.3},{name:'Initia',symbol:'INIT',price:0.78,change:19.5}];const newCoin=newCoins[Math.floor(Math.random()*newCoins.length)];const coin={id:Date.now(),...newCoin,volume:(Math.random()*50+5).toFixed(1)+'M',listed:new Date(),verified:true,logo:newCoin.symbol.substring(0,2)};coins.unshift(coin);if(coins.length>20)coins.pop();renderCoinsTable();renderNotifMockup();showToast('New verified coin listed: '+newCoin.name+' ('+newCoin.symbol+')','success');const notifContainer=document.getElementById('notifMockup');const item=document.createElement('div');item.className='notif-item';item.style.animation='slideIn 0.5s ease-out';item.innerHTML='<div class="icon"><i class="fas fa-rocket"></i></div><div class="content"><h5>'+newCoin.name+' ('+newCoin.symbol+') listed on Bitget Spot</h5><p>Initial price: $'+newCoin.price+' | 24h: +'+(newCoin.change>=0?'+':'')+newCoin.change+'%</p></div><span class="time">Just now</span>';notifContainer.insertBefore(item,notifContainer.firstChild);if(notifContainer.children.length>5)notifContainer.lastChild.remove();animateStats()}
+
+function animateStats(){const stats=[{id:'statCoins',target:coins.length},{id:'statAlerts',target:Math.floor(Math.random()*500+1200)},{id:'statUsers',target:Math.floor(Math.random()*200+2847)}];stats.forEach(s=>{const el=document.getElementById(s.id);if(!el)return;let current=0;const increment=s.target/50;const timer=setInterval(()=>{current+=increment;if(current>=s.target){current=s.target;clearInterval(timer)}el.textContent=Math.floor(current).toLocaleString()},30)})}
+
+function showToast(message,type){const container=document.getElementById('toastContainer');const toast=document.createElement('div');toast.className='toast '+type;const icons={success:'fa-check-circle',info:'fa-info-circle',warning:'fa-exclamation-triangle'};toast.innerHTML='<i class="fas '+icons[type]+'"></i><div class="toast-content"><h6>'+(type==='success'?'Success':type==='info'?'Info':'Warning')+'</h6><p>'+message+'</p></div>';container.appendChild(toast);setTimeout(()=>{toast.style.opacity='0';toast.style.transform='translateX(40px)';setTimeout(()=>toast.remove(),400)},4000)}
+
+function openModal(type){document.getElementById(type+'Modal').classList.add('show')}
+
+function closeModal(type){document.getElementById(type+'Modal').classList.remove('show')}
+
+function handleLogin(e){e.preventDefault();const email=document.getElementById('loginEmail').value;currentUser={name:email.split('@')[0],email:email};closeModal('login');updateAuthUI();showToast('Welcome back, '+currentUser.name+'!','success');showPage('dashboard')}
+
+function handleSignup(e){e.preventDefault();const name=document.getElementById('signupName').value;const email=document.getElementById('signupEmail').value;currentUser={name:name,email:email};closeModal('signup');updateAuthUI();showToast('Account created successfully! Welcome, '+name+'!','success');showPage('dashboard')}
+
+function logout(){currentUser=null;updateAuthUI();showToast('Logged out successfully','info');showPage('home')}
+
+function updateAuthUI(){if(currentUser){document.getElementById('loginBtn').style.display='none';document.getElementById('signupBtn').style.display='none';document.getElementById('logoutBtn').style.display='inline-flex';document.getElementById('navDashboard').style.display='inline-block'}else{document.getElementById('loginBtn').style.display='inline-flex';document.getElementById('signupBtn').style.display='inline-flex';document.getElementById('logoutBtn').style.display='none';document.getElementById('navDashboard').style.display='none'}}
+
+function subscribe(plan){const plans={'pro-monthly':{name:'Pro Monthly',price:'$9.99 USDT'},'pro-yearly':{name:'Pro Yearly',price:'$79.99 USDT'}};selectedPlan=plans[plan];document.getElementById('subConfirmName').textContent=selectedPlan.name;document.getElementById('subConfirmPrice').textContent=selectedPlan.price;openModal('sub')}
+
+function proceedToPayment(){closeModal('sub');document.getElementById('payPlanName').textContent=selectedPlan.name;document.getElementById('payPlanPrice').textContent=selectedPlan.price;showPage('payment')}
+
+function confirmPayment(){showToast('Payment confirmed! Your subscription is now active.','success');showPage('dashboard')}
+
+function copyWallet(id){const text=document.getElementById(id).textContent;navigator.clipboard.writeText(text).then(()=>showToast('Wallet address copied!','success')).catch(()=>showToast('Failed to copy','warning'))}
+
+function toggleChannel(channel){const toggle=document.getElementById(channel+'Toggle');toggle.classList.toggle('on');const state=toggle.classList.contains('on')?'enabled':'disabled';showToast(channel.toUpperCase()+' notifications '+state,'success')}
+
+// Close modals on outside click
+document.querySelectorAll('.modal-overlay').forEach(overlay=>{overlay.addEventListener('click',e=>{if(e.target===overlay)overlay.classList.remove('show')})});
+
+// Keyboard shortcuts
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.querySelectorAll('.modal-overlay').forEach(m=>m.classList.remove('show'))}});
+</script>
+
+<!-- Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    const SUPABASE_URL = 'https://bmybjtjmxwirmglcuymk.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJteWJqdGpteHdpcm1nbGN1eW1rIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI1NTcwMjksImV4cCI6MjA5ODEzMzAyOX0.iA5EAUDFLkJyooelLcX2q1MI3cz2dq93UX8D4d-FVms';
+    
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    
+    async function signUp(email, password) {
+        if (!email || !password) {
+            alert('أدخل البريد وكلمة المرور');
+            return;
+        }
+        try {
+            const { data, error } = await supabaseClient.auth.signUp({
+                email: email,
+                password: password
+            });
+            if (error) {
+                alert('خطأ: ' + error.message);
+            } else {
+                alert('تم إنشاء الحساب! يمكنك تسجيل الدخول الآن.');
+            }
+        } catch (err) {
+            alert('خطأ: ' + err.message);
+        }
+    }
+    
+    async function signIn(email, password) {
+        if (!email || !password) {
+            alert('أدخل البريد وكلمة المرور');
+            return;
+        }
+        try {
+            const { data, error } = await supabaseClient.auth.signInWithPassword({
+                email: email,
+                password: password
+            });
+            if (error) {
+                alert('خطأ: ' + error.message);
+            } else {
+                alert('تم تسجيل الدخول!');
+                localStorage.setItem('user', JSON.stringify(data.user));
+                updateAuthUI();
+            }
+        } catch (err) {
+            alert('خطأ: ' + err.message);
+        }
+    }
+    
+    async function signOut() {
+        await supabaseClient.auth.signOut();
+        localStorage.removeItem('user');
+        location.reload();
+    }
+    
+    function updateAuthUI() {
+        const user = JSON.parse(localStorage.getItem('user'));
+        const authContent = document.getElementById('auth-content');
+        
+        if (user && authContent) {
+            authContent.innerHTML = `
+                <h4 style="color:#3b82f6;">👋 مرحباً ${user.email}</h4>
+                <p style="color:#8b95a8;font-size:0.85rem;">تم تسجيل الدخول بنجاح</p>
+                
+                <div style="margin:15px 0;padding:15px;background:#232a3b;border-radius:8px;">
+                    <h5 style="margin:0 0 10px 0;color:#f0f2f7;">اختر خطتك</h5>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                        <button onclick="selectPlan('Free')" style="flex:1;padding:8px;background:#1a1f2e;border:1px solid #22c55e;color:#22c55e;border-radius:6px;font-size:0.8rem;">Free</button>
+                        <button onclick="selectPlan('Pro')" style="flex:1;padding:8px;background:#1a1f2e;border:1px solid #3b82f6;color:#3b82f6;border-radius:6px;font-size:0.8rem;">Pro $9.99</button>
+                        <button onclick="selectPlan('Pro Yearly')" style="flex:1;padding:8px;background:#1a1f2e;border:1px solid #f59e0b;color:#f59e0b;border-radius:6px;font-size:0.8rem;">Yearly $79.99</button>
+                    </div>
+                </div>
+                
+                <div id="current-plan" style="margin:10px 0;padding:10px;background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.3);border-radius:6px;display:none;">
+                    <p style="margin:0;color:#3b82f6;font-size:0.85rem;">📊 الخطة: <span id="plan-name">-</span></p>
+                </div>
+                
+                <button onclick="signOut()" style="width:100%;padding:10px;background:#ef4444;color:white;border:none;border-radius:8px;margin-top:10px;">تسجيل خروج</button>
+            `;
+            checkUserPlan();
+        }
+    }
+    
+    async function selectPlan(planName) {
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (!user) {
+            alert('سجل الدخول أولاً');
+            return;
+        }
+        
+        try {
+            const { data, error } = await supabaseClient
+                .from('subscriptions')
+                .insert([
+                    { user_id: user.id, plan: planName, status: 'pending' }
+                ]);
+                
+            if (error) {
+                alert('خطأ: ' + error.message);
+            } else {
+                alert('تم اختيار الخطة: ' + planName);
+                document.getElementById('plan-name').textContent = planName;
+                document.getElementById('current-plan').style.display = 'block';
+            }
+        } catch (err) {
+            alert('خطأ: ' + err.message);
+        }
+    }
+    
+    async function checkUserPlan() {
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (!user) return;
+        
+        try {
+            const { data, error } = await supabaseClient
+                .from('subscriptions')
+                .select('*')
+                .eq('user_id', user.id)
+                .order('created_at', { ascending: false })
+                .limit(1);
+                
+            if (data && data.length > 0) {
+                document.getElementById('plan-name').textContent = data[0].plan;
+                document.getElementById('current-plan').style.display = 'block';
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    }
+    
+    window.addEventListener('load', function() {
+        if (localStorage.getItem('user')) {
+            updateAuthUI();
+        }
+    });
+</script>
+</body>
+</html>
